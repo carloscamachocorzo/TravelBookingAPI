@@ -1,4 +1,6 @@
 
+using TravelBooking.Application.DependecyInyection;
+
 namespace TravelBooking.API
 {
     public class Program
@@ -8,7 +10,8 @@ namespace TravelBooking.API
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
+            // Agregar servicios de la capa de Application
+            builder.Services.AddApplicationServices();
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
