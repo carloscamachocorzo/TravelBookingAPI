@@ -1,0 +1,1 @@
+*Para ejecutar el scaffold se debe realizar ubicado en la carpeta (...\TravelBookingAPI\src\TravelBooking.Infraestructure)
