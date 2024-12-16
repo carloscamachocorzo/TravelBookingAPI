@@ -45,6 +45,8 @@ namespace TravelBooking.Application.Services.Interfaces
         /// </summary>
         /// <returns>A list of all existing hotels.</returns>
         Task<RequestResult<List<CreateHotelResponseDto>>> GetAllHotelsAsync();
+
+        Task<RequestResult<List<SearchHotelResponseDto>>> SearchHotelsAsync(SearchHotelsDto searchHotelsDto);
     }
 
 }

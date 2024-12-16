@@ -8,12 +8,12 @@
         /// <summary>
         /// The check-in date for the hotel search. Optional.
         /// </summary>
-        public DateTime? CheckInDate { get; set; }
+        public DateOnly? CheckInDate { get; set; }
 
         /// <summary>
         /// The check-out date for the hotel search. Optional.
         /// </summary>
-        public DateTime? CheckOutDate { get; set; }
+        public DateOnly? CheckOutDate { get; set; }
 
         /// <summary>
         /// The number of guests for the hotel booking. Optional.

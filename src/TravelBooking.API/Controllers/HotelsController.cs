@@ -125,6 +125,25 @@ namespace TravelBooking.API.Controllers
             return StatusCode(500, RequestResult<List<CreateHotelResponseDto>>.CreateError(result.ErrorMessage));
         }
 
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchHotels([FromQuery] SearchHotelsDto searchHotelsDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _hotelAppService.SearchHotelsAsync(searchHotelsDto);
+
+            if (result.IsSuccessful)
+            {
+                return Ok(RequestResult<List<SearchHotelResponseDto>>.CreateSuccessful(result.Result));
+            }
+            else
+            {
+                return BadRequest(RequestResult<List<SearchHotelResponseDto>>.CreateUnsuccessful(result.Messages));
+            }
+        }
 
     }
 }

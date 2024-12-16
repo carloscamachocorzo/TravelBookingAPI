@@ -1,9 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TravelBooking.Domain.Interfaces;
 using TravelBooking.Infraestructure.DataAccess.Contexts;
 
@@ -42,6 +37,29 @@ namespace TravelBooking.Infraestructure.Repositories
             _Context.Hotels.Update(hotel);
             await _Context.SaveChangesAsync();
         }
-        
+        public async Task<List<Hotels>> SearchHotelsAsync(DateOnly? checkInDate, DateOnly? checkOutDate, int? totalGuests, string? city)
+        {
+            var query = _Context.Hotels.AsQueryable();
+
+            // Filtrar por ciudad
+            if (!string.IsNullOrEmpty(city))
+            {
+                query = query.Where(h => h.City.Contains(city));
+            }
+
+            // Filtrar por fechas
+            query = query.Where(h =>
+                h.Rooms.Any(r => r.Reservations.Any(res =>
+                    (res.CheckInDate <= checkOutDate && res.CheckOutDate >= checkInDate) // Verifica si hay reservas que se solapan
+                ))
+            );
+
+            // Filtrar por capacidad de personas (puedes ajustar según cómo se maneja la capacidad en tu modelo)
+            query = query.Where(h => h.Rooms.Any(r => r.Capacity >= totalGuests));
+
+            // Ejecutar la consulta y devolver los resultados
+            return await query.ToListAsync();
+        }
+
     }
 }
