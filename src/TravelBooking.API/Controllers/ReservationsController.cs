@@ -54,6 +54,33 @@ namespace TravelBooking.API.Controllers
 
             return StatusCode(500, RequestResult<ReservationDetailsDto>.CreateError(result.ErrorMessage));
         }
+
+        /// <summary>
+        /// Crear una nueva reserva.
+        /// </summary>
+        /// <param name="createReservationDto">Datos de la reserva</param>
+        /// <returns>La reserva creada</returns>
+        [HttpPost("create")]
+        public async Task<IActionResult> CreateReservation([FromBody] CreateReservationDto createReservationDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _reservationsAppService.CreateReservationAsync(createReservationDto);
+
+            if (result.IsSuccessful)
+            {
+                return CreatedAtAction(nameof(GetReservationById), new { reservationId = result.Result.ReservationId }, RequestResult<ReservationDetailsDto>.CreateSuccessful(result.Result));
+            }
+            else if (!result.IsError)
+            {
+                return BadRequest(RequestResult<ReservationDetailsDto>.CreateUnsuccessful(result.Messages));
+            }
+
+            return StatusCode(500, RequestResult<ReservationDetailsDto>.CreateError(result.ErrorMessage));
+        }
         [HttpPost("{reservationId}/notify")]
         public async Task<IActionResult> NotifyReservation(int reservationId)
         {

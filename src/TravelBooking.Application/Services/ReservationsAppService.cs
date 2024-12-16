@@ -90,10 +90,10 @@ namespace TravelBooking.Application.Services
                     return RequestResult<ReservationDetailsDto>.CreateError($"Room with ID {createReservationDto.RoomId} not found.");
                 }
 
-                //if (room.Capacity < createReservationDto.TotalGuests)
-                //{
-                //    return RequestResult<ReservationDetailsDto>.CreateError($"Room capacity ({room.Capacity}) is less than the total guests.");
-                //}
+                if (room.Capacity < createReservationDto.TotalGuests)
+                {
+                    return RequestResult<ReservationDetailsDto>.CreateError($"Room capacity ({room.Capacity}) is less than the total guests.");
+                }
 
                 // Calcular el costo total
                 var totalDays = (createReservationDto.CheckOutDate.ToDateTime(TimeOnly.MinValue) - createReservationDto.CheckInDate.ToDateTime(TimeOnly.MinValue)).Days;
@@ -102,12 +102,13 @@ namespace TravelBooking.Application.Services
                 // Crear entidad de reserva
                 var reservation = new Reservations
                 {
+                    
                     RoomId = createReservationDto.RoomId,
                     UserId = createReservationDto.UserId,
                     CheckInDate = createReservationDto.CheckInDate,
                     CheckOutDate = createReservationDto.CheckOutDate,
                     TotalGuests = createReservationDto.TotalGuests,
-                    ReservationDate = DateTime.UtcNow,
+                    ReservationDate = DateTime.Now,
                     TotalCost = totalCost,
                     EmergencyContacts = createReservationDto.EmergencyContacts?
                         .Select(ec => new EmergencyContacts { FullName = ec.Name, PhoneNumber = ec.Phone })
@@ -126,10 +127,10 @@ namespace TravelBooking.Application.Services
                         })
                         .ToList()
                 };
-
+                
                 // Guardar en la base de datos
                 await _reservationsRepository.CreateAsync(reservation);
-
+                reservation.Room = room;
                 // Mapear la reserva al DTO de respuesta
                 var reservationDetails = _mapper.Map<ReservationDetailsDto>(reservation);
 

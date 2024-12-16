@@ -1,4 +1,5 @@
-﻿using TravelBooking.Domain.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using TravelBooking.Domain.Interfaces;
 using TravelBooking.Infraestructure.DataAccess.Contexts;
 
 namespace TravelBooking.Infraestructure.Repositories
@@ -19,7 +20,8 @@ namespace TravelBooking.Infraestructure.Repositories
         }
         public async Task<Rooms?> GetByIdAsync(int roomId)
         {
-            return await _context.Rooms.FindAsync(roomId);
+            return await _context.Rooms.AsNoTracking().Include(r => r.Hotel)
+                .Where(r => r.RoomId == roomId).FirstOrDefaultAsync();
         }
         public async Task UpdateAsync(Rooms room)
         {

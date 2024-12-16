@@ -23,6 +23,7 @@ namespace TravelBooking.Application.DependecyInyection
             services.AddScoped<IHotelRepository, HotelRepository>();
             services.AddScoped<IRoomRepository, RoomRepository>();
             services.AddScoped<IReservationsRepository, ReservationsRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
             //Domain
             services.AddScoped<IReservationNotifierService, ReservationNotifierService>();
             // Registrar el servicio de correo
