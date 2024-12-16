@@ -13,8 +13,9 @@ namespace TravelBooking.Application.DependecyInyection
             //Application
             services.AddScoped<ICreateHotelAppService, CreateHotelAppService>();
 
-            //Domain
+            //Repositories
             services.AddScoped<IHotelRepository, HotelRepository>();
+            services.AddScoped<IRoomRepository, RoomRepository>();
             // Configura los servicios de MediatR (si no lo has hecho antes)
             //services.AddMediatR(typeof(Program).Assembly);
             return services;

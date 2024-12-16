@@ -28,7 +28,7 @@ namespace TravelBooking.API.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> CreateHotel([FromBody] CreateHotelDto request)
         {
-            // Invoca el manejador de comandos
+
             var result = await _createHotelAppService.CreateHotel(request);
 
             if (result.IsSuccessful)
@@ -39,9 +39,27 @@ namespace TravelBooking.API.Controllers
             {
                 return BadRequest(RequestResult<HotelDto>.CreateUnsuccessful(result.Messages));
             }
-
             return StatusCode(500, RequestResult<HotelDto>.CreateError(result.ErrorMessage));
+        }
 
+        [HttpPost("{hotelId}/rooms")]
+        public async Task<IActionResult> AssignRoomsToHotel(int hotelId, [FromBody] CreateRoomsRequest request)
+        {
+            if (request.Rooms == null || !request.Rooms.Any())
+            {
+                return BadRequest("The request must include at least one room.");
+            }
+            var result = await _createHotelAppService.AssignRoomsToHotel(hotelId, request);
+
+            if (result.IsSuccessful)
+            {
+                return Ok(result);
+            }
+            else if (!result.IsError)
+            {
+                return BadRequest(RequestResult<HotelDto>.CreateUnsuccessful(result.Messages));
+            }
+            return StatusCode(500, RequestResult<HotelDto>.CreateError(result.ErrorMessage));
         }
     }
 }

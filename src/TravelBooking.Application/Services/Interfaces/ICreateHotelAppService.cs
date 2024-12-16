@@ -20,5 +20,6 @@ namespace TravelBooking.Application.Services.Interfaces
         /// Una tarea que representa el resultado de la operación. El resultado incluye un objeto <see cref="RequestResult{T}"/> con información sobre el hotel creado (<see cref="HotelDto"/>).
         /// </returns>
         Task<RequestResult<HotelDto>> CreateHotel(CreateHotelDto request);
+        Task<RequestResult<bool>> AssignRoomsToHotel(int hotelId, CreateRoomsRequest request);
     }
 }

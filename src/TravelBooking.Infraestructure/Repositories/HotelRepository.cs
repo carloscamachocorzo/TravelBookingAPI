@@ -32,9 +32,9 @@ namespace TravelBooking.Infraestructure.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<Hotels?> GetByIdAsync(int id)
+        public async Task<Hotels?> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return  _Context.Hotels.FirstOrDefault(h => h.HotelId == id);
         }
 
         public Task UpdateAsync(Hotels hotel)
