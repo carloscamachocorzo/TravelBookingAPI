@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using TravelBooking.Application.Automapper;
 using TravelBooking.Application.Services;
 using TravelBooking.Application.Services.Interfaces;
 using TravelBooking.Domain.Interfaces;
@@ -26,8 +27,8 @@ namespace TravelBooking.Application.DependecyInyection
             services.AddScoped<IReservationNotifierService, ReservationNotifierService>();
             // Registrar el servicio de correo
             services.AddTransient<IEmailService, EmailService>();
-            // Registrar el servicio de correo
-            services.AddTransient<IEmailService, EmailService>();
+            // Registrar el AutoMapper
+            services.AddAutoMapper(typeof(GlobalMapperProfile));
 
             return services;
         }

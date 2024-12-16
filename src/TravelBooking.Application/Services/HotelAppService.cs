@@ -1,4 +1,5 @@
-﻿using TravelBooking.Application.Common;
+﻿using AutoMapper;
+using TravelBooking.Application.Common;
 using TravelBooking.Application.Dtos.Hotels;
 using TravelBooking.Application.Services.Interfaces;
 using TravelBooking.Domain.Interfaces;
@@ -15,16 +16,18 @@ namespace TravelBooking.Application.Services
     {
         private readonly IHotelRepository _hotelRepository;
         private readonly IRoomRepository _roomRepository;
+        private readonly IMapper _mapper;
         /// <summary>
         /// Constructor para inicializar el servicio con el repositorio de hoteles.
         /// </summary>
         /// <param name="hotelRepository">
         /// Instancia del repositorio de hoteles que se utiliza para persistir los datos.
         /// </param>
-        public HotelAppService(IHotelRepository hotelRepository, IRoomRepository roomRepository)
+        public HotelAppService(IHotelRepository hotelRepository, IRoomRepository roomRepository, IMapper mapper)
         {
             _hotelRepository = hotelRepository;
             _roomRepository = roomRepository;
+            _mapper = mapper;
         }
 
         public async Task<RequestResult<HotelDto>> CreateHotel(CreateHotelDto request)
@@ -50,7 +53,7 @@ namespace TravelBooking.Application.Services
                     Name = hotel.Name,
                     Address = hotel.Address,
                     City = hotel.City
-                }, new List<string> { "Hotel creado con éxito." });
+                }, new List<string> { "hotel created successfully." });
             }
             catch (Exception ex)
             {
@@ -91,6 +94,30 @@ namespace TravelBooking.Application.Services
                 // Si ocurrió un error
                 return RequestResult<bool>.CreateError("Error al crear el hotel: " + ex.Message);
             }
+        }
+        public async Task<RequestResult<bool>> UpdateHotelAsync(int hotelId, UpdateHotelDto updateHotelDto)
+        {
+            try
+            {
+                var hotel = await _hotelRepository.GetByIdAsync(hotelId);
+
+                if (hotel == null)
+                {
+                    throw new KeyNotFoundException("Hotel not found.");
+                }
+
+                // Actualizar los valores del hotel
+                _mapper.Map(updateHotelDto, hotel);
+                // Guardar cambios en el repositorio
+                await _hotelRepository.UpdateAsync(hotel);
+                return RequestResult<bool>.CreateSuccessful(true, new List<string> { "hotel updated successfully" });
+            }
+            catch (Exception ex)
+            {
+                // Si ocurrió un error
+                return RequestResult<bool>.CreateError("Error al actualizar el hotel: " + ex.Message);
+            }
+
         }
     }
 }

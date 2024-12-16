@@ -37,9 +37,10 @@ namespace TravelBooking.Infraestructure.Repositories
             return  _Context.Hotels.FirstOrDefault(h => h.HotelId == id);
         }
 
-        public Task UpdateAsync(Hotels hotel)
+        public async Task UpdateAsync(Hotels hotel)
         {
-            throw new NotImplementedException();
+            _Context.Hotels.Update(hotel);
+            await _Context.SaveChangesAsync();
         }
     }
 }

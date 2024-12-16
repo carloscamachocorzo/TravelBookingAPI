@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Mvc;
 using TravelBooking.Application.Common;
 using TravelBooking.Application.Dtos.Hotels;
 using TravelBooking.Application.Services.Interfaces;
@@ -9,7 +10,7 @@ namespace TravelBooking.API.Controllers
     [ApiController]
     public class HotelsController : ControllerBase
     {
-        private readonly IHotelAppService _createHotelAppService;
+        private readonly IHotelAppService _hotelAppService;
 
         /// <summary>
         /// Constructor para inyectar las dependencias
@@ -17,7 +18,7 @@ namespace TravelBooking.API.Controllers
         /// <param name="createHotelAppService"></param>
         public HotelsController(IHotelAppService createHotelAppService)
         {
-            _createHotelAppService = createHotelAppService;
+            _hotelAppService = createHotelAppService;
         }
 
         /// <summary>
@@ -29,11 +30,11 @@ namespace TravelBooking.API.Controllers
         public async Task<IActionResult> CreateHotel([FromBody] CreateHotelDto request)
         {
 
-            var result = await _createHotelAppService.CreateHotel(request);
+            var result = await _hotelAppService.CreateHotel(request);
 
             if (result.IsSuccessful)
             {
-                return Ok(RequestResult<HotelDto>.CreateSuccessful(result.Result, new List<string> { "Hotel creado con éxito." }));
+                return Ok(RequestResult<HotelDto>.CreateSuccessful(result.Result));
             }
             else if (!result.IsError)
             {
@@ -41,7 +42,12 @@ namespace TravelBooking.API.Controllers
             }
             return StatusCode(500, RequestResult<HotelDto>.CreateError(result.ErrorMessage));
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="hotelId"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost("{hotelId}/rooms")]
         public async Task<IActionResult> AssignRoomsToHotel(int hotelId, [FromBody] CreateRoomsRequest request)
         {
@@ -49,7 +55,7 @@ namespace TravelBooking.API.Controllers
             {
                 return BadRequest("The request must include at least one room.");
             }
-            var result = await _createHotelAppService.AssignRoomsToHotel(hotelId, request);
+            var result = await _hotelAppService.AssignRoomsToHotel(hotelId, request);
 
             if (result.IsSuccessful)
             {
@@ -61,5 +67,27 @@ namespace TravelBooking.API.Controllers
             }
             return StatusCode(500, RequestResult<HotelDto>.CreateError(result.ErrorMessage));
         }
+
+        [HttpPut("{hotelId}")]
+        public async Task<IActionResult> UpdateHotel(int hotelId, [FromBody] UpdateHotelDto updateHotelDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+             
+            var result = await _hotelAppService.UpdateHotelAsync(hotelId, updateHotelDto);
+
+            if (result.IsSuccessful)
+            {
+                return Ok(RequestResult<bool>.CreateSuccessful(result.Result));
+            }
+            else if (!result.IsError)
+            {
+                return BadRequest(RequestResult<bool>.CreateUnsuccessful(result.Messages));
+            }
+            return StatusCode(500, RequestResult<bool>.CreateError(result.ErrorMessage));
+        }
+
     }
 }
