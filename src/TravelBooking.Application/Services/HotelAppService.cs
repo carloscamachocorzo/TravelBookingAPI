@@ -119,5 +119,48 @@ namespace TravelBooking.Application.Services
             }
 
         }
+        public async Task<RequestResult<bool>> UpdateHotelStatusAsync(int hotelId, bool status)
+        {
+            try
+            {
+                var hotel = await _hotelRepository.GetByIdAsync(hotelId);
+
+                if (hotel == null)
+                {
+                    return RequestResult<bool>.CreateError("Hotel not found.");
+                }
+
+                hotel.Status = status;
+
+                await _hotelRepository.UpdateAsync(hotel);
+
+                return RequestResult<bool>.CreateSuccessful(true, new List<string> { "Hotel status updated successfully" });
+            }
+            catch (Exception ex)
+            {
+                return RequestResult<bool>.CreateError("Error updating hotel status: " + ex.Message);
+            }
+        }
+        public async Task<RequestResult<List<HotelDto>>> GetAllHotelsAsync()
+        {
+            try
+            {
+                var hotels = await _hotelRepository.GetAllAsync();
+
+                if (!hotels.Any())
+                {
+                    return RequestResult<List<HotelDto>>.CreateUnsuccessful(new List<string> { "No hotels found." });
+                }
+
+                var hotelDtos = _mapper.Map<List<HotelDto>>(hotels);
+
+                return RequestResult<List<HotelDto>>.CreateSuccessful(hotelDtos);
+            }
+            catch (Exception ex)
+            {
+                return RequestResult<List<HotelDto>>.CreateError("Error retrieving hotels: " + ex.Message);
+            }
+        }
+        
     }
 }

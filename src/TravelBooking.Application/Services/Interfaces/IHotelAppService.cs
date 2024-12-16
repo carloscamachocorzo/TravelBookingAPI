@@ -22,5 +22,7 @@ namespace TravelBooking.Application.Services.Interfaces
         Task<RequestResult<HotelDto>> CreateHotel(CreateHotelDto request);
         Task<RequestResult<bool>> AssignRoomsToHotel(int hotelId, CreateRoomsRequest request);
         Task<RequestResult<bool>> UpdateHotelAsync(int hotelId, UpdateHotelDto updateHotelDto);
+        Task<RequestResult<bool>> UpdateHotelStatusAsync(int hotelId, bool status);
+        Task<RequestResult<List<HotelDto>>> GetAllHotelsAsync(); 
     }
 }

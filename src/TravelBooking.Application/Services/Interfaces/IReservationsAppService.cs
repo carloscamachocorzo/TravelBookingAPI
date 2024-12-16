@@ -7,5 +7,7 @@ namespace TravelBooking.Application.Services.Interfaces
     {
         Task<RequestResult<IEnumerable<ReservationResponseDto>>> ExecuteAsync();
         Task ExecuteNotifyReservationAsync(int reservationId);
+        Task<RequestResult<ReservationDetailsDto>> GetReservationByIdAsync(int reservationId);
+        Task<RequestResult<ReservationDetailsDto>> CreateReservationAsync(CreateReservationDto createReservationDto);
     }
 }

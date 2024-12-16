@@ -40,5 +40,31 @@ namespace TravelBooking.API.Controllers
             }
             return StatusCode(500, RequestResult<HotelDto>.CreateError(result.ErrorMessage));
         }
+        /// <summary>
+        /// Habilitar/deshabilitar una habitación
+        /// </summary>
+        /// <param name="roomId"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        [HttpPatch("{roomId}/status")]
+        public async Task<IActionResult> UpdateRoomStatus(int roomId, [FromBody] UpdateRoomStatusDto statusDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _roomAppService.UpdateRoomStatusAsync(roomId, statusDto);
+
+            if (result.IsSuccessful)
+            {
+                return Ok(RequestResult<bool>.CreateSuccessful(result.Result, new List<string> { "Room status updated successfully." }));
+            }
+            else if (!result.IsError)
+            {
+                return BadRequest(RequestResult<bool>.CreateUnsuccessful(result.Messages));
+            }
+            return StatusCode(500, RequestResult<bool>.CreateError(result.ErrorMessage));
+        }
     }
 }

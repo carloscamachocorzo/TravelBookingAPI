@@ -8,6 +8,6 @@ namespace TravelBooking.Domain.Interfaces
         Task<Hotels?> GetByIdAsync(int id);
         Task<IEnumerable<Hotels>> GetAllAsync();
         Task UpdateAsync(Hotels hotel);
-        Task DeleteAsync(int id);
+        Task DeleteAsync(int id); 
     }
 }

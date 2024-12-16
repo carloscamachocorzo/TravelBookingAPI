@@ -76,7 +76,8 @@ namespace TravelBooking.Domain.Services
                 <div class='details'>
                     <p><strong>Fecha de entrada:</strong> {reservation.CheckInDate:yyyy-MM-dd}</p>
                     <p><strong>Fecha de salida:</strong> {reservation.CheckOutDate:yyyy-MM-dd}</p>
-                    <p><strong>Habitación:</strong> {reservation.RoomId}</p>
+                    <p><strong>Habitación:</strong> {reservation.Room.Number}</p>
+                    <p><strong>Total Huespedes:</strong> {reservation.TotalGuests}</p>
                     <p><strong>Precio total:</strong> {reservation.TotalCost:C}</p>
                 </div>
                 <p>Si tienes alguna pregunta o necesitas asistencia adicional, no dudes en contactarnos.</p>

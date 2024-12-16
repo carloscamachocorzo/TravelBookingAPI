@@ -43,6 +43,30 @@ namespace TravelBooking.Application.Services
                 return RequestResult<bool>.CreateError("Error al crear el hotel: " + ex.Message);
             }
         }
+        public async Task<RequestResult<bool>> UpdateRoomStatusAsync(int roomId, UpdateRoomStatusDto statusDto)
+        {
+            try
+            {
+                var room = await _roomRepository.GetByIdAsync(roomId);
+
+                if (room == null)
+                {
+                    return RequestResult<bool>.CreateError($"Room with ID {roomId} not found.");
+                }
+
+                // Actualizar el estado de la habitación
+                room.Status = statusDto.IsEnabled;
+
+                // Guardar cambios en el repositorio
+                await _roomRepository.UpdateAsync(room);
+
+                return RequestResult<bool>.CreateSuccessful(true, new List<string> { "Room status updated successfully." });
+            }
+            catch (Exception ex)
+            {
+                return RequestResult<bool>.CreateError($"An error occurred while updating the room status: {ex.Message}");
+            }
+        }
         private void UpdateRoom(UpdateRoomRequest updateRoomRequest, Rooms rooms)
         {
             rooms.Number=updateRoomRequest.Number;

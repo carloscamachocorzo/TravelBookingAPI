@@ -7,5 +7,6 @@ namespace TravelBooking.Domain.Interfaces
         Task<Reservations?> GetByIdAsync(int ReservationId);
         Task AddAsync(Reservations reservations);
         Task<List<Reservations>> GetAllAsync();
+        Task CreateAsync(Reservations reservation);
     }
 }

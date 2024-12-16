@@ -27,9 +27,9 @@ namespace TravelBooking.Infraestructure.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Hotels>> GetAllAsync()
+        public async Task<IEnumerable<Hotels>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _Context.Hotels.ToListAsync();
         }
 
         public async Task<Hotels?> GetByIdAsync(int id)
@@ -42,5 +42,6 @@ namespace TravelBooking.Infraestructure.Repositories
             _Context.Hotels.Update(hotel);
             await _Context.SaveChangesAsync();
         }
+        
     }
 }

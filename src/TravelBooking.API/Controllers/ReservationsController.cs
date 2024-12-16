@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TravelBooking.Application.Common;
 using TravelBooking.Application.Dtos.Hotels;
+using TravelBooking.Application.Dtos.Reservation;
 using TravelBooking.Application.Services;
 using TravelBooking.Application.Services.Interfaces;
 
@@ -31,6 +32,27 @@ namespace TravelBooking.API.Controllers
                 return BadRequest(RequestResult<HotelDto>.CreateUnsuccessful(result.Messages));
             }
             return StatusCode(500, RequestResult<HotelDto>.CreateError(result.ErrorMessage));
+        }
+        /// <summary>
+        /// Obtener el detalle de una reserva específica.
+        /// </summary>
+        /// <param name="reservationId">ID de la reserva</param>
+        /// <returns>Detalle de la reserva</returns>
+        [HttpGet("{reservationId}")]
+        public async Task<IActionResult> GetReservationById(int reservationId)
+        {
+            var result = await _reservationsAppService.GetReservationByIdAsync(reservationId);
+
+            if (result.IsSuccessful)
+            {
+                return Ok(RequestResult<ReservationDetailsDto>.CreateSuccessful(result.Result));
+            }
+            else if (!result.IsError)
+            {
+                return NotFound(RequestResult<ReservationDetailsDto>.CreateUnsuccessful(result.Messages));
+            }
+
+            return StatusCode(500, RequestResult<ReservationDetailsDto>.CreateError(result.ErrorMessage));
         }
         [HttpPost("{reservationId}/notify")]
         public async Task<IActionResult> NotifyReservation(int reservationId)

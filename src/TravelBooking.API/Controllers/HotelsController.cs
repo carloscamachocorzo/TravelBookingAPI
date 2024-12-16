@@ -89,5 +89,42 @@ namespace TravelBooking.API.Controllers
             return StatusCode(500, RequestResult<bool>.CreateError(result.ErrorMessage));
         }
 
+        [HttpPatch("{hotelId}/status")]
+        public async Task<IActionResult> UpdateHotelStatus(int hotelId, [FromBody] UpdateHotelStatusDto request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _hotelAppService.UpdateHotelStatusAsync(hotelId, request.Status);
+
+            if (result.IsSuccessful)
+            {
+                return Ok(RequestResult<bool>.CreateSuccessful(result.Result));
+            }
+            else if (!result.IsError)
+            {
+                return BadRequest(RequestResult<bool>.CreateUnsuccessful(result.Messages));
+            }
+            return StatusCode(500, RequestResult<bool>.CreateError(result.ErrorMessage));
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetAllHotels()
+        {
+            var result = await _hotelAppService.GetAllHotelsAsync();
+
+            if (result.IsSuccessful)
+            {
+                return Ok(RequestResult<List<HotelDto>>.CreateSuccessful(result.Result));
+            }
+            else if (!result.IsError)
+            {
+                return NotFound(RequestResult<List<HotelDto>>.CreateUnsuccessful(result.Messages));
+            }
+            return StatusCode(500, RequestResult<List<HotelDto>>.CreateError(result.ErrorMessage));
+        }
+
+
     }
 }

@@ -12,5 +12,6 @@ namespace TravelBooking.Application.Services.Interfaces
     public interface IRoomAppService
     {
         Task<RequestResult<bool>> ExecuteUpdateRoomAsync(UpdateRoomRequest request);
+        Task<RequestResult<bool>> UpdateRoomStatusAsync(int roomId, UpdateRoomStatusDto statusDto);
     }
 }
