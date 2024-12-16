@@ -26,7 +26,7 @@ namespace TravelBooking.Infraestructure.Services
 
             var mailMessage = new MailMessage
             {
-                From = new MailAddress(_smtpSettings.UserName),
+                From = new MailAddress(_smtpSettings.FromEmail),
                 Subject = subject,
                 Body = body,
                 IsBodyHtml = true
