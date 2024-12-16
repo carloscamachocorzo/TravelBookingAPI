@@ -1,13 +1,13 @@
 ﻿using MediatR;
 
-namespace TravelBooking.Application.Commands
+namespace TravelBooking.Application.Dtos
 {
-    public class CreateHotelCommand : IRequest<Unit>
+    public class CreateHotelDto
     {
-        public string Name { get; set; }
-        public string Address { get; set; }
+        public string? Name { get; set; }
+        public string? Address { get; set; }
 
-        public string City { get; set; }
+        public string? City { get; set; }
 
         public bool Status { get; set; }
 

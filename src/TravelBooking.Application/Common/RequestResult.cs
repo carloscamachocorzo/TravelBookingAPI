@@ -5,7 +5,7 @@
         public bool IsSuccessful { get; set; }
         public bool IsError { get; set; }
         public string? ErrorMessage { get; set; }
-        public IEnumerable<string> Messages { get; set; }
+        public IEnumerable<string>? Messages { get; set; }
         public T Result { get; set; }
 
         public RequestResult()
@@ -24,7 +24,7 @@
         }
 
         // Método estático para crear una respuesta exitosa
-        public static RequestResult<T> CreateSuccessful(T result, IEnumerable<string> messages = null)
+        public static RequestResult<T> CreateSuccessful(T result, IEnumerable<string>? messages = null)
         {
             return new RequestResult<T>(isSuccessful: true, isError: false, errorMessage: null, messages: messages ?? new List<string>(), result: result);
         }

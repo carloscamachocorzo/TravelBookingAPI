@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
-using TravelBooking.Application.Commands;
+﻿using Microsoft.AspNetCore.Mvc;
 using TravelBooking.Application.Common;
 using TravelBooking.Application.Dtos;
 using TravelBooking.Application.Services.Interfaces;
@@ -12,20 +9,27 @@ namespace TravelBooking.API.Controllers
     [ApiController]
     public class HotelsController : ControllerBase
     {
-        private readonly ICreateHotelCommandHandler _createHotelCommandHandler;
+        private readonly ICreateHotelAppService _createHotelAppService;
 
-        // Inyección de dependencias para el manejador de comandos
-        public HotelsController(ICreateHotelCommandHandler createHotelCommandHandler)
+        /// <summary>
+        /// Constructor para inyectar las dependencias
+        /// </summary>
+        /// <param name="createHotelAppService"></param>
+        public HotelsController(ICreateHotelAppService createHotelAppService)
         {
-            _createHotelCommandHandler = createHotelCommandHandler;
+            _createHotelAppService = createHotelAppService;
         }
 
-        // Endpoint para crear un hotel
+        /// <summary>
+        /// Creacion de Hoteles
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost("create")]
-        public async Task<IActionResult> CreateHotel([FromBody] CreateHotelCommand command)
+        public async Task<IActionResult> CreateHotel([FromBody] CreateHotelDto request)
         {
             // Invoca el manejador de comandos
-            var result = await _createHotelCommandHandler.Handle(command);
+            var result = await _createHotelAppService.CreateHotel(request);
 
             if (result.IsSuccessful)
             {
