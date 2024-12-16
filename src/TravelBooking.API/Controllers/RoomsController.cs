@@ -36,9 +36,9 @@ namespace TravelBooking.API.Controllers
             }
             else if (!result.IsError)
             {
-                return BadRequest(RequestResult<HotelDto>.CreateUnsuccessful(result.Messages));
+                return BadRequest(RequestResult<CreateHotelResponseDto>.CreateUnsuccessful(result.Messages));
             }
-            return StatusCode(500, RequestResult<HotelDto>.CreateError(result.ErrorMessage));
+            return StatusCode(500, RequestResult<CreateHotelResponseDto>.CreateError(result.ErrorMessage));
         }
         /// <summary>
         /// Habilitar/deshabilitar una habitación

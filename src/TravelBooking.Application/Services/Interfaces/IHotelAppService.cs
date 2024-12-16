@@ -1,28 +1,50 @@
-﻿using MediatR;
-using TravelBooking.Application.Common;
+﻿using TravelBooking.Application.Common;
 using TravelBooking.Application.Dtos.Hotels;
 
 namespace TravelBooking.Application.Services.Interfaces
 {
-    /// <summary>
-    /// Interface para la creación de hoteles en la aplicación.
-    /// Proporciona un contrato para manejar la lógica relacionada con la creación de registros de hoteles.
+
+    /// <summary>  
+    /// Defines the operations available for managing hotels.
     /// </summary>
     public interface IHotelAppService
     {
         /// <summary>
-        /// Crea un nuevo hotel en el sistema.
+        /// Creates a new hotel.
         /// </summary>
-        /// <param name="request">
-        /// Un objeto <see cref="CreateHotelDto"/> que contiene los detalles necesarios para crear un hotel.
-        /// </param>
-        /// <returns>
-        /// Una tarea que representa el resultado de la operación. El resultado incluye un objeto <see cref="RequestResult{T}"/> con información sobre el hotel creado (<see cref="HotelDto"/>).
-        /// </returns>
-        Task<RequestResult<HotelDto>> CreateHotel(CreateHotelDto request);
+        /// <param name="request">The details of the hotel to be created.</param>
+        /// <returns>The result containing the details of the created hotel.</returns>
+        Task<RequestResult<CreateHotelResponseDto>> CreateHotel(CreateHotelDto request);
+
+        /// <summary>
+        /// Assigns rooms to an existing hotel.
+        /// </summary>
+        /// <param name="hotelId">The unique identifier of the hotel.</param>
+        /// <param name="request">The list of rooms to be assigned to the hotel.</param>
+        /// <returns>The result indicating whether the operation was successful.</returns>
         Task<RequestResult<bool>> AssignRoomsToHotel(int hotelId, CreateRoomsRequest request);
+
+        /// <summary>
+        /// Updates the details of an existing hotel.
+        /// </summary>
+        /// <param name="hotelId">The unique identifier of the hotel to be updated.</param>
+        /// <param name="updateHotelDto">The updated details of the hotel.</param>
+        /// <returns>The result indicating whether the operation was successful.</returns>
         Task<RequestResult<bool>> UpdateHotelAsync(int hotelId, UpdateHotelDto updateHotelDto);
+
+        /// <summary>
+        /// Updates the status of an existing hotel.
+        /// </summary>
+        /// <param name="hotelId">The unique identifier of the hotel.</param>
+        /// <param name="status">The new status of the hotel (active or inactive).</param>
+        /// <returns>The result indicating whether the operation was successful.</returns>
         Task<RequestResult<bool>> UpdateHotelStatusAsync(int hotelId, bool status);
-        Task<RequestResult<List<HotelDto>>> GetAllHotelsAsync(); 
+
+        /// <summary>
+        /// Retrieves all hotels.
+        /// </summary>
+        /// <returns>A list of all existing hotels.</returns>
+        Task<RequestResult<List<CreateHotelResponseDto>>> GetAllHotelsAsync();
     }
+
 }

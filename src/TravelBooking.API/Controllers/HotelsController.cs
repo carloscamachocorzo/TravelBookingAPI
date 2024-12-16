@@ -34,13 +34,13 @@ namespace TravelBooking.API.Controllers
 
             if (result.IsSuccessful)
             {
-                return Ok(RequestResult<HotelDto>.CreateSuccessful(result.Result));
+                return Ok(RequestResult<CreateHotelResponseDto>.CreateSuccessful(result.Result));
             }
             else if (!result.IsError)
             {
-                return BadRequest(RequestResult<HotelDto>.CreateUnsuccessful(result.Messages));
+                return BadRequest(RequestResult<CreateHotelResponseDto>.CreateUnsuccessful(result.Messages));
             }
-            return StatusCode(500, RequestResult<HotelDto>.CreateError(result.ErrorMessage));
+            return StatusCode(500, RequestResult<CreateHotelResponseDto>.CreateError(result.ErrorMessage));
         }
         /// <summary>
         /// 
@@ -63,9 +63,9 @@ namespace TravelBooking.API.Controllers
             }
             else if (!result.IsError)
             {
-                return BadRequest(RequestResult<HotelDto>.CreateUnsuccessful(result.Messages));
+                return BadRequest(RequestResult<CreateHotelResponseDto>.CreateUnsuccessful(result.Messages));
             }
-            return StatusCode(500, RequestResult<HotelDto>.CreateError(result.ErrorMessage));
+            return StatusCode(500, RequestResult<CreateHotelResponseDto>.CreateError(result.ErrorMessage));
         }
 
         [HttpPut("{hotelId}")]
@@ -116,13 +116,13 @@ namespace TravelBooking.API.Controllers
 
             if (result.IsSuccessful)
             {
-                return Ok(RequestResult<List<HotelDto>>.CreateSuccessful(result.Result));
+                return Ok(RequestResult<List<CreateHotelResponseDto>>.CreateSuccessful(result.Result));
             }
             else if (!result.IsError)
             {
-                return NotFound(RequestResult<List<HotelDto>>.CreateUnsuccessful(result.Messages));
+                return NotFound(RequestResult<List<CreateHotelResponseDto>>.CreateUnsuccessful(result.Messages));
             }
-            return StatusCode(500, RequestResult<List<HotelDto>>.CreateError(result.ErrorMessage));
+            return StatusCode(500, RequestResult<List<CreateHotelResponseDto>>.CreateError(result.ErrorMessage));
         }
 
 

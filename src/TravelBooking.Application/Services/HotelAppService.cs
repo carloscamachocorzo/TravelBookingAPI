@@ -30,7 +30,7 @@ namespace TravelBooking.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<RequestResult<HotelDto>> CreateHotel(CreateHotelDto request)
+        public async Task<RequestResult<CreateHotelResponseDto>> CreateHotel(CreateHotelDto request)
         {
             try
             {
@@ -41,13 +41,14 @@ namespace TravelBooking.Application.Services
                     Address = request.Address,
                     City = request.City,
                     Status = request.Status,
-                    BaseRate = request.BaseRate
+                    BaseRate = request.BaseRate,
+                    Tax = request.Tax
                 };
 
                 // Guardar el hotel en el repositorio
                 await _hotelRepository.AddAsync(hotel);
                 // Si la creación fue exitosa
-                return RequestResult<HotelDto>.CreateSuccessful(new HotelDto
+                return RequestResult<CreateHotelResponseDto>.CreateSuccessful(new CreateHotelResponseDto
                 {
                     Id = hotel.HotelId,
                     Name = hotel.Name,
@@ -59,7 +60,7 @@ namespace TravelBooking.Application.Services
             {
 
                 // Si ocurrió un error
-                return RequestResult<HotelDto>.CreateError("Error al crear el hotel: " + ex.Message);
+                return RequestResult<CreateHotelResponseDto>.CreateError("Error al crear el hotel: " + ex.Message);
             }
         }
 
@@ -82,7 +83,8 @@ namespace TravelBooking.Application.Services
                     Location = roomDto.Location,
                     BaseCost = roomDto.BaseCost,
                     Tax = roomDto.Tax,
-                    HotelId = hotelId
+                    HotelId = hotelId,
+                    Status = roomDto.Status,
                 }).ToList();
 
                 await _roomRepository.AddRangeAsync(rooms);
@@ -141,7 +143,7 @@ namespace TravelBooking.Application.Services
                 return RequestResult<bool>.CreateError("Error updating hotel status: " + ex.Message);
             }
         }
-        public async Task<RequestResult<List<HotelDto>>> GetAllHotelsAsync()
+        public async Task<RequestResult<List<CreateHotelResponseDto>>> GetAllHotelsAsync()
         {
             try
             {
@@ -149,18 +151,18 @@ namespace TravelBooking.Application.Services
 
                 if (!hotels.Any())
                 {
-                    return RequestResult<List<HotelDto>>.CreateUnsuccessful(new List<string> { "No hotels found." });
+                    return RequestResult<List<CreateHotelResponseDto>>.CreateUnsuccessful(new List<string> { "No hotels found." });
                 }
 
-                var hotelDtos = _mapper.Map<List<HotelDto>>(hotels);
+                var hotelDtos = _mapper.Map<List<CreateHotelResponseDto>>(hotels);
 
-                return RequestResult<List<HotelDto>>.CreateSuccessful(hotelDtos);
+                return RequestResult<List<CreateHotelResponseDto>>.CreateSuccessful(hotelDtos);
             }
             catch (Exception ex)
             {
-                return RequestResult<List<HotelDto>>.CreateError("Error retrieving hotels: " + ex.Message);
+                return RequestResult<List<CreateHotelResponseDto>>.CreateError("Error retrieving hotels: " + ex.Message);
             }
         }
-        
+
     }
 }

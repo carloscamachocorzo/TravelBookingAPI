@@ -1,5 +1,9 @@
 ﻿namespace TravelBooking.Application.Common
 {
+    /// <summary>
+    /// Respuesta personalizada para indicar el resultado, mensajes y Data
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public sealed class RequestResult<T>
     {
         public bool IsSuccessful { get; set; }
