@@ -32,5 +32,22 @@ namespace TravelBooking.API.Controllers
             }
             return StatusCode(500, RequestResult<HotelDto>.CreateError(result.ErrorMessage));
         }
+        [HttpPost("{reservationId}/notify")]
+        public async Task<IActionResult> NotifyReservation(int reservationId)
+        {
+            try
+            {
+                await _reservationsAppService.ExecuteNotifyReservationAsync(reservationId);
+                return Ok(new { Message = "Notificación enviada exitosamente." });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { Error = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Error = $"Error interno del servidor: {ex.Message}" });
+            }
+        }
     }
 }

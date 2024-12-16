@@ -2,7 +2,10 @@
 using TravelBooking.Application.Services;
 using TravelBooking.Application.Services.Interfaces;
 using TravelBooking.Domain.Interfaces;
+using TravelBooking.Domain.Services;
+using TravelBooking.Domain.Services.Interfaces;
 using TravelBooking.Infraestructure.Repositories;
+using TravelBooking.Infraestructure.Services;
 
 namespace TravelBooking.Application.DependecyInyection
 {
@@ -19,7 +22,13 @@ namespace TravelBooking.Application.DependecyInyection
             services.AddScoped<IHotelRepository, HotelRepository>();
             services.AddScoped<IRoomRepository, RoomRepository>();
             services.AddScoped<IReservationsRepository, ReservationsRepository>();
-            
+            //Domain
+            services.AddScoped<IReservationNotifierService, ReservationNotifierService>();
+            // Registrar el servicio de correo
+            services.AddTransient<IEmailService, EmailService>();
+            // Registrar el servicio de correo
+            services.AddTransient<IEmailService, EmailService>();
+
             return services;
         }
     }

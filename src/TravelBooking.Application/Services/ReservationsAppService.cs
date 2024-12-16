@@ -2,30 +2,35 @@
 using TravelBooking.Application.Dtos.Reservation;
 using TravelBooking.Application.Services.Interfaces;
 using TravelBooking.Domain.Interfaces;
+using TravelBooking.Domain.Services.Interfaces;
+using TravelBooking.Infraestructure;
+using TravelBooking.Infraestructure.Repositories;
 
 namespace TravelBooking.Application.Services
 {
-    public class ReservationsAppService: IReservationsAppService
+    public class ReservationsAppService : IReservationsAppService
     {
         private readonly IReservationsRepository _reservationsRepository;
-
-        public ReservationsAppService(IReservationsRepository reservations)
+        private readonly IReservationNotifierService _reservationNotifier;
+        public ReservationsAppService(IReservationsRepository reservations, IReservationNotifierService reservationNotifierService)
         {
             _reservationsRepository = reservations;
+            _reservationNotifier = reservationNotifierService;
         }
         public async Task<RequestResult<IEnumerable<ReservationResponseDto>>> ExecuteAsync()
         {
             try
             {
                 var reservations = await _reservationsRepository.GetAllAsync();
-                var result= reservations.Select(r => new ReservationResponseDto
+                var result = reservations.Select(r => new ReservationResponseDto
                 {
-                    //Id = r.Id,
-                    //GuestName = r.GuestName,
+                    ReservationId = r.ReservationId,
+                    RoomId = r.RoomId,
+                    UserId = r.UserId,
                     CheckInDate = r.CheckInDate,
                     CheckOutDate = r.CheckOutDate,
-                    RoomId = r.RoomId
-                    //TotalPrice = r.TotalPrice
+                    TotalGuests = r.TotalGuests
+
                 });
                 return RequestResult<IEnumerable<ReservationResponseDto>>.CreateSuccessful(result, new List<string> { "query done successfully" });
             }
@@ -34,7 +39,15 @@ namespace TravelBooking.Application.Services
                 // Si ocurrió un error
                 return RequestResult<IEnumerable<ReservationResponseDto>>.CreateError("Error al crear el hotel: " + ex.Message);
             }
-           
+
+        }
+        public async Task ExecuteNotifyReservationAsync(int reservationId)
+        {
+            var reservation = await _reservationsRepository.GetByIdAsync(reservationId);
+            if (reservation == null)
+                throw new KeyNotFoundException($"No se encontró una reserva con el ID {reservationId}.");
+
+            await _reservationNotifier.NotifyReservationAsync(reservation);
         }
     }
 }

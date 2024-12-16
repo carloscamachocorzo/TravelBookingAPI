@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using TravelBooking.Application.DependecyInyection;
 using TravelBooking.Infraestructure.DataAccess.Contexts;
+using TravelBooking.Infraestructure.Services;
 
 namespace TravelBooking.API
 {
@@ -18,6 +19,9 @@ namespace TravelBooking.API
             // Add services to the container.
             // Agregar servicios de la capa de Application
             builder.Services.AddApplicationServices();
+            // Cargar configuración de SMTP desde appsettings.json
+            builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("SmtpSettings"));
+
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
