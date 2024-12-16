@@ -1,4 +1,4 @@
-﻿namespace TravelBooking.Application.Dtos
+﻿namespace TravelBooking.Application.Dtos.Hotels
 {
     public class CreateRoomDto
     {

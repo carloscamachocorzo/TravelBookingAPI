@@ -1,5 +1,5 @@
 ﻿using TravelBooking.Application.Common;
-using TravelBooking.Application.Dtos;
+using TravelBooking.Application.Dtos.Hotels;
 using TravelBooking.Application.Services.Interfaces;
 using TravelBooking.Domain.Interfaces;
 using TravelBooking.Infraestructure;
@@ -11,7 +11,7 @@ namespace TravelBooking.Application.Services
     /// Servicio de aplicación para la creación de hoteles.
     /// Implementa la lógica necesaria para registrar nuevos hoteles en el sistema.
     /// </summary>
-    public class CreateHotelAppService : ICreateHotelAppService
+    public class HotelAppService : IHotelAppService
     {
         private readonly IHotelRepository _hotelRepository;
         private readonly IRoomRepository _roomRepository;
@@ -21,7 +21,7 @@ namespace TravelBooking.Application.Services
         /// <param name="hotelRepository">
         /// Instancia del repositorio de hoteles que se utiliza para persistir los datos.
         /// </param>
-        public CreateHotelAppService(IHotelRepository hotelRepository, IRoomRepository roomRepository)
+        public HotelAppService(IHotelRepository hotelRepository, IRoomRepository roomRepository)
         {
             _hotelRepository = hotelRepository;
             _roomRepository = roomRepository;

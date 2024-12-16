@@ -11,7 +11,8 @@ namespace TravelBooking.Application.DependecyInyection
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             //Application
-            services.AddScoped<ICreateHotelAppService, CreateHotelAppService>();
+            services.AddScoped<IHotelAppService, HotelAppService>();
+            services.AddScoped<IRoomAppService, RoomAppService>();
 
             //Repositories
             services.AddScoped<IHotelRepository, HotelRepository>();

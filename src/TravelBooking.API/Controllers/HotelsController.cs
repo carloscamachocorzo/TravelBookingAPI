@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TravelBooking.Application.Common;
-using TravelBooking.Application.Dtos;
+using TravelBooking.Application.Dtos.Hotels;
 using TravelBooking.Application.Services.Interfaces;
 
 namespace TravelBooking.API.Controllers
@@ -9,13 +9,13 @@ namespace TravelBooking.API.Controllers
     [ApiController]
     public class HotelsController : ControllerBase
     {
-        private readonly ICreateHotelAppService _createHotelAppService;
+        private readonly IHotelAppService _createHotelAppService;
 
         /// <summary>
         /// Constructor para inyectar las dependencias
         /// </summary>
         /// <param name="createHotelAppService"></param>
-        public HotelsController(ICreateHotelAppService createHotelAppService)
+        public HotelsController(IHotelAppService createHotelAppService)
         {
             _createHotelAppService = createHotelAppService;
         }

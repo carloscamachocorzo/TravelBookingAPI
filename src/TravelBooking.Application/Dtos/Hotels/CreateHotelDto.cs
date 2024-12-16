@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace TravelBooking.Application.Dtos
+namespace TravelBooking.Application.Dtos.Hotels
 {
     public class CreateHotelDto
     {

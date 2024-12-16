@@ -17,5 +17,15 @@ namespace TravelBooking.Infraestructure.Repositories
             await _context.Rooms.AddRangeAsync(rooms);
             await _context.SaveChangesAsync();
         }
+        public async Task<Rooms?> GetByIdAsync(int roomId)
+        {
+            return await _context.Rooms.FindAsync(roomId);
+        }
+        public async Task UpdateAsync(Rooms room)
+        {
+            _context.Rooms.Update(room);
+            await _context.SaveChangesAsync();
+        }
+
     }
 }

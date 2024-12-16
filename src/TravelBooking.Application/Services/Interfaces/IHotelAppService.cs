@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using TravelBooking.Application.Common;
-using TravelBooking.Application.Dtos;
+using TravelBooking.Application.Dtos.Hotels;
 
 namespace TravelBooking.Application.Services.Interfaces
 {
@@ -8,7 +8,7 @@ namespace TravelBooking.Application.Services.Interfaces
     /// Interface para la creación de hoteles en la aplicación.
     /// Proporciona un contrato para manejar la lógica relacionada con la creación de registros de hoteles.
     /// </summary>
-    public interface ICreateHotelAppService
+    public interface IHotelAppService
     {
         /// <summary>
         /// Crea un nuevo hotel en el sistema.
