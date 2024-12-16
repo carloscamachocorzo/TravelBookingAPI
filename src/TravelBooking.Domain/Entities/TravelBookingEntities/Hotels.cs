@@ -19,7 +19,7 @@ public partial class Hotels
 
     public decimal Tax { get; set; }
 
-    public DateTime CreatedDate { get; set; }
+    public DateTime CreatedDate { get; set; } = DateTime.Now;
 
     public virtual ICollection<Rooms> Rooms { get; set; } = new List<Rooms>();
 }

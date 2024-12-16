@@ -1,5 +1,7 @@
 
+using Microsoft.EntityFrameworkCore;
 using TravelBooking.Application.DependecyInyection;
+using TravelBooking.Infraestructure.DataAccess.Contexts;
 
 namespace TravelBooking.API
 {
@@ -8,6 +10,10 @@ namespace TravelBooking.API
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            // Configura la cadena de conexión
+            builder.Services.AddDbContext<TravelBookingContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             // Add services to the container.
             // Agregar servicios de la capa de Application
