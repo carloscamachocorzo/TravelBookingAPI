@@ -21,6 +21,8 @@ public partial class Rooms
 
     public bool Status { get; set; }
 
+    public int Capacity { get; set; }
+
     public virtual Hotels Hotel { get; set; }
 
     public virtual ICollection<Reservations> Reservations { get; set; } = new List<Reservations>();

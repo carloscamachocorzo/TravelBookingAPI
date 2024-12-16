@@ -14,7 +14,7 @@ namespace TravelBooking.Infraestructure.Repositories
         }
         public async Task<Reservations?> GetByIdAsync(int ReservationId)
         {
-            return await _context.Reservations.AsNoTracking().Include(r => r.User).Include(r=> r.Room)
+            return await _context.Reservations.AsNoTracking().Include(r => r.User).Include(r => r.Room)
                 .Where(r => r.ReservationId == ReservationId).FirstOrDefaultAsync();
         }
         public async Task<List<Reservations>> GetAllAsync()
@@ -24,6 +24,12 @@ namespace TravelBooking.Infraestructure.Repositories
         public async Task AddAsync(Reservations reservations)
         {
             await _context.Reservations.AddAsync(reservations);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task CreateAsync(Reservations reservation)
+        {
+            _context.Reservations.Add(reservation);
             await _context.SaveChangesAsync();
         }
     }

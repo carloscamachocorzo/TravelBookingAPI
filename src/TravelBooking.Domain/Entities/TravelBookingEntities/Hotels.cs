@@ -19,7 +19,9 @@ public partial class Hotels
 
     public decimal Tax { get; set; }
 
-    public DateTime CreatedDate { get; set; } = DateTime.Now;
+    public DateTime CreatedDate { get; set; }
+
+    public int? MaxCapacity { get; set; }
 
     public virtual ICollection<Rooms> Rooms { get; set; } = new List<Rooms>();
 }
