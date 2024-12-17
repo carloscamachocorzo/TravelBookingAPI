@@ -1,12 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+﻿using Microsoft.AspNetCore.Mvc;
 using TravelBooking.Application.Common;
 using TravelBooking.Application.Dtos.Hotels;
 using TravelBooking.Application.Dtos.Rooms;
 using TravelBooking.Application.Services.Interfaces;
-using TravelBooking.Infraestructure;
 
 namespace TravelBooking.API.Controllers
 {

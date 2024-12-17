@@ -27,9 +27,25 @@ namespace TravelBooking.Application.Automapper
             .ForMember(dest => dest.NumberOfGuests, opt => opt.MapFrom(src => src.TotalGuests))  
             .ReverseMap(); // Habilita el mapeo en ambas direcciones 
 
-            // Configuración para mapear Room a RoomDto
+            // Configuración para mapear Room a RoomResponseDto
             CreateMap<Rooms, RoomResponseDto>()
-                .ForMember(dest => dest.HotelName, opt => opt.MapFrom(src => src.Hotel.Name));
+            // Mapeo explícito de RoomName (propiedad 'Number' en Rooms)
+            .ForMember(dest => dest.RoomName, opt => opt.MapFrom(src => src.Number))
+
+            // Mapeo explícito de HotelName desde la entidad Hotel relacionada
+            .ForMember(dest => dest.HotelName, opt => opt.MapFrom(src => src.Hotel != null ? src.Hotel.Name : string.Empty))
+
+            // Mapeo explícito de RoomType (propiedad 'Type' en Rooms)
+            .ForMember(dest => dest.RoomType, opt => opt.MapFrom(src => src.Type))
+
+            // Capacidad se mapea automáticamente
+            .ForMember(dest => dest.Capacity, opt => opt.MapFrom(src => src.Capacity))
+
+            // Calcular Rate como la suma de BaseCost + Tax
+            .ForMember(dest => dest.Rate, opt => opt.MapFrom(src => src.BaseCost + src.Tax))
+
+            // Mapeo de IsAvailable basado en el estado de la habitación
+            .ForMember(dest => dest.IsAvailable, opt => opt.MapFrom(src => src.Status));
 
         }
     }

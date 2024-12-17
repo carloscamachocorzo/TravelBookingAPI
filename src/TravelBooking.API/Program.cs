@@ -11,7 +11,13 @@ namespace TravelBooking.API
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
+            // Configurar logging
+            var loggerFactory = LoggerFactory.Create(builder =>
+            {
+                builder.AddConsole();
+                builder.AddDebug();
+                builder.AddFile("Logs/TravelBooking-{Date}.txt");
+            });
             // Configura la cadena de conexión
             builder.Services.AddDbContext<TravelBookingContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
