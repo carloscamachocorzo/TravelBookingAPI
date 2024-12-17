@@ -37,15 +37,21 @@ namespace TravelBooking.Application.Automapper
 
             // Mapeo explícito de RoomType (propiedad 'Type' en Rooms)
             .ForMember(dest => dest.RoomType, opt => opt.MapFrom(src => src.Type))
-
-            // Capacidad se mapea automáticamente
-            .ForMember(dest => dest.Capacity, opt => opt.MapFrom(src => src.Capacity))
+             
 
             // Calcular Rate como la suma de BaseCost + Tax
             .ForMember(dest => dest.Rate, opt => opt.MapFrom(src => src.BaseCost + src.Tax))
 
             // Mapeo de IsAvailable basado en el estado de la habitación
             .ForMember(dest => dest.IsAvailable, opt => opt.MapFrom(src => src.Status));
+
+            CreateMap<Hotels, CreateHotelResponseDto>()
+            // Mapeo explícito del identificador del hotel
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.HotelId));
+
+            CreateMap<Hotels, SearchHotelResponseDto>()
+            // Mapeo explícito para Name -> HotelName
+            .ForMember(dest => dest.HotelName, opt => opt.MapFrom(src => src.Name));
 
         }
     }

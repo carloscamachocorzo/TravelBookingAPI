@@ -34,6 +34,13 @@
         /// The tax applied to the base rate.
         /// </summary>
         public decimal Tax { get; set; }
+        /// <summary>
+        /// Represents the maximum capacity of the room or hotel.
+        /// </summary>
+        /// <value>
+        /// The maximum number of guests the room or hotel can accommodate. This value can be null if not specified.
+        /// </value>
+        public int? MaxCapacity { get; set; }
     }
 
 }

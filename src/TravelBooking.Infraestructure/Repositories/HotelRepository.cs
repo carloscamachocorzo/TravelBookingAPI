@@ -29,7 +29,7 @@ namespace TravelBooking.Infraestructure.Repositories
 
         public async Task<Hotels?> GetByIdAsync(int id)
         {
-            return  _Context.Hotels.FirstOrDefault(h => h.HotelId == id);
+            return _Context.Hotels.FirstOrDefault(h => h.HotelId == id);
         }
 
         public async Task UpdateAsync(Hotels hotel)
@@ -46,16 +46,20 @@ namespace TravelBooking.Infraestructure.Repositories
             {
                 query = query.Where(h => h.City.Contains(city));
             }
+            if (checkInDate != null && checkOutDate != null)
+            {
+                // Filtrar por fechas
+                query = query.Where(h =>
+                    h.Rooms.Any(r => r.Reservations.Any(res =>
+                        (res.CheckInDate <= checkOutDate && res.CheckOutDate >= checkInDate) // Verifica si hay reservas que se solapan
+                    ))
+                );
+            }
 
-            // Filtrar por fechas
-            query = query.Where(h =>
-                h.Rooms.Any(r => r.Reservations.Any(res =>
-                    (res.CheckInDate <= checkOutDate && res.CheckOutDate >= checkInDate) // Verifica si hay reservas que se solapan
-                ))
-            );
 
             // Filtrar por capacidad de personas (puedes ajustar según cómo se maneja la capacidad en tu modelo)
-            query = query.Where(h => h.Rooms.Any(r => r.Capacity >= totalGuests));
+            if (totalGuests != null)
+                query = query.Where(h => h.Rooms.Any(r => r.Capacity >= totalGuests));
 
             // Ejecutar la consulta y devolver los resultados
             return await query.ToListAsync();

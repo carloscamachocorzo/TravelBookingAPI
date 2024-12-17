@@ -42,7 +42,9 @@ namespace TravelBooking.Application.Services
                     City = request.City,
                     Status = request.Status,
                     BaseRate = request.BaseRate,
-                    Tax = request.Tax
+                    Tax = request.Tax,
+                    CreatedDate = DateTime.Now,
+                    MaxCapacity = request.MaxCapacity
                 };
 
                 // Guardar el hotel en el repositorio
