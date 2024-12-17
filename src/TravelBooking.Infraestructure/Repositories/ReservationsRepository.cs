@@ -19,7 +19,7 @@ namespace TravelBooking.Infraestructure.Repositories
         }
         public async Task<List<Reservations>> GetAllAsync()
         {
-            return await _context.Reservations.ToListAsync();
+            return await _context.Reservations.AsNoTracking().Include(r => r.EmergencyContacts).ToListAsync();
         }
         public async Task AddAsync(Reservations reservations)
         {

@@ -42,6 +42,10 @@ namespace TravelBooking.Application.Services
             try
             {
                 var reservations = await _reservationsRepository.GetAllAsync();
+                if (!reservations.Any())
+                {
+                    return RequestResult<IEnumerable<ReservationResponseDto>>.CreateUnsuccessful(new List<string> { "no results found" });
+                }
                 var result = reservations.Select(r => new ReservationResponseDto
                 {
                     ReservationId = r.ReservationId,
@@ -49,7 +53,16 @@ namespace TravelBooking.Application.Services
                     UserId = r.UserId,
                     CheckInDate = r.CheckInDate,
                     CheckOutDate = r.CheckOutDate,
-                    TotalGuests = r.TotalGuests
+                    TotalGuests = r.TotalGuests,
+                    TotalCost = r.TotalCost,
+                    ReservationDate = r.ReservationDate,
+                    EmergencyContacts = r.EmergencyContacts.Select(m => new EmergencyContactsResponseDto
+                    {
+                        EmergencyContactId = m.EmergencyContactId,
+                        FullName = m.FullName,
+                        PhoneNumber = m.PhoneNumber,
+                        ReservationId = m.ReservationId
+                    }).ToList()
 
                 });
                 return RequestResult<IEnumerable<ReservationResponseDto>>.CreateSuccessful(result, new List<string> { "query done successfully" });
@@ -111,7 +124,7 @@ namespace TravelBooking.Application.Services
                 // Crear entidad de reserva
                 var reservation = new Reservations
                 {
-                    
+
                     RoomId = createReservationDto.RoomId,
                     UserId = createReservationDto.UserId,
                     CheckInDate = createReservationDto.CheckInDate,
@@ -136,7 +149,7 @@ namespace TravelBooking.Application.Services
                         })
                         .ToList()
                 };
-                
+
                 // Guardar en la base de datos
                 await _reservationsRepository.CreateAsync(reservation);
                 reservation.Room = room;
