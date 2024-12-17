@@ -12,26 +12,35 @@ namespace TravelBooking.Application.DependecyInyection
 {
     public static class DependencyInjectionProfile
     {
+        /// <summary>
+        /// Registers application services, repositories, domain services, and other dependencies into the service container.
+        /// </summary>
+        /// <param name="services">The <see cref="IServiceCollection"/> to which the services will be added.</param>
+        /// <returns>The updated <see cref="IServiceCollection"/> instance.</returns>
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-            //Application
-            services.AddScoped<IHotelAppService, HotelAppService>();
-            services.AddScoped<IRoomAppService, RoomAppService>();
-            services.AddScoped<IReservationsAppService, ReservationsAppService>();
+            // Application Services
+            services.AddScoped<IHotelAppService, HotelAppService>(); // Hotel service
+            services.AddScoped<IRoomAppService, RoomAppService>(); // Room service
+            services.AddScoped<IReservationsAppService, ReservationsAppService>(); // Reservations service
 
-            //Repositories
-            services.AddScoped<IHotelRepository, HotelRepository>();
-            services.AddScoped<IRoomRepository, RoomRepository>();
-            services.AddScoped<IReservationsRepository, ReservationsRepository>();
-            services.AddScoped<IUserRepository, UserRepository>();
-            //Domain
-            services.AddScoped<IReservationNotifierService, ReservationNotifierService>();
-            // Registrar el servicio de correo
-            services.AddTransient<IEmailService, EmailService>();
-            // Registrar el AutoMapper
-            services.AddAutoMapper(typeof(GlobalMapperProfile));
+            // Repositories
+            services.AddScoped<IHotelRepository, HotelRepository>(); // Hotel repository
+            services.AddScoped<IRoomRepository, RoomRepository>(); // Room repository
+            services.AddScoped<IReservationsRepository, ReservationsRepository>(); // Reservations repository
+            services.AddScoped<IUserRepository, UserRepository>(); // User repository
+
+            // Domain Services
+            services.AddScoped<IReservationNotifierService, ReservationNotifierService>(); // Reservation notifier service
+
+            // Register email service
+            services.AddTransient<IEmailService, EmailService>(); // Email service
+
+            // Register AutoMapper
+            services.AddAutoMapper(typeof(GlobalMapperProfile)); // AutoMapper configuration
 
             return services;
         }
     }
+
 }

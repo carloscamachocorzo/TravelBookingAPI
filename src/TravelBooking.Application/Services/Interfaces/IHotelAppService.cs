@@ -45,6 +45,11 @@ namespace TravelBooking.Application.Services.Interfaces
         /// </summary>
         /// <returns>A list of all existing hotels.</returns>
         Task<RequestResult<List<CreateHotelResponseDto>>> GetAllHotelsAsync();
+        /// <summary>
+        /// Searches for hotels based on the provided search criteria.
+        /// </summary>
+        /// <param name="searchHotelsDto">The DTO containing the search criteria, such as location, price range, etc.</param>
+        /// <returns>A <see cref="RequestResult{List{SearchHotelResponseDto}}"/> containing the list of hotels that match the search criteria.</returns>
 
         Task<RequestResult<List<SearchHotelResponseDto>>> SearchHotelsAsync(SearchHotelsDto searchHotelsDto);
     }

@@ -17,6 +17,14 @@ namespace TravelBooking.Application.Services
         private readonly IMapper _mapper;
         private readonly ILogger<HotelAppService> _logger;
         private string className = new StackFrame().GetMethod()?.ReflectedType?.Name ?? "HotelAppService";
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HotelAppService"/> class.
+        /// </summary>
+        /// <param name="hotelRepository">The repository used for hotel data operations.</param>
+        /// <param name="roomRepository">The repository used for room data operations.</param>
+        /// <param name="mapper">The AutoMapper instance for mapping between entities and DTOs.</param>
+        /// <param name="logger">The logger instance for logging service-related information.</param>
+
         public HotelAppService(IHotelRepository hotelRepository, IRoomRepository roomRepository, IMapper mapper, ILogger<HotelAppService> logger)
         {
             _hotelRepository = hotelRepository;
@@ -55,7 +63,7 @@ namespace TravelBooking.Application.Services
             }
             catch (Exception ex)
             {
-
+                _logger.LogError(ex, "An error occurred while processing hotel data.");
                 // Si ocurrió un error
                 return RequestResult<CreateHotelResponseDto>.CreateError("Error al crear el hotel: " + ex.Message);
             }

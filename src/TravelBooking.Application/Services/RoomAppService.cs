@@ -17,6 +17,12 @@ namespace TravelBooking.Application.Services
     {
         private readonly IRoomRepository _roomRepository;
         private readonly IMapper _mapper;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RoomAppService"/> class.
+        /// </summary>
+        /// <param name="roomRepository">The repository that manages room data.</param>
+        /// <param name="mapper">The instance of <see cref="IMapper"/> for mapping between entities and DTOs.</param>
+
         public RoomAppService(IRoomRepository roomRepository, IMapper mapper)
         {
             _roomRepository = roomRepository;

@@ -2,20 +2,24 @@
 
 namespace TravelBooking.Domain.Interfaces
 {
+    /// <summary>
+    /// Interface for managing user operations.
+    /// </summary>
     public interface IUserRepository
     {
         /// <summary>
-        /// Obtiene un usuario por su ID.
+        /// Asynchronously retrieves a user by their identifier.
         /// </summary>
-        /// <param name="userId">El ID del usuario.</param>
-        /// <returns>La entidad de usuario, o null si no existe.</returns>
+        /// <param name="userId">The unique identifier of the user.</param>
+        /// <returns>A <see cref="Task{TResult}"/> representing the asynchronous operation, containing the user entity, or <c>null</c> if not found.</returns>
         Task<Users?> GetByIdAsync(int userId);
 
         /// <summary>
-        /// Verifica si un usuario existe por su ID.
+        /// Asynchronously checks if a user exists in the repository by their identifier.
         /// </summary>
-        /// <param name="userId">El ID del usuario.</param>
-        /// <returns>True si existe, false en caso contrario.</returns>
+        /// <param name="userId">The unique identifier of the user.</param>
+        /// <returns>A <see cref="Task{TResult}"/> representing the asynchronous operation, containing <c>true</c> if the user exists, otherwise <c>false</c>.</returns>
         Task<bool> ExistsAsync(int userId);
     }
+
 }

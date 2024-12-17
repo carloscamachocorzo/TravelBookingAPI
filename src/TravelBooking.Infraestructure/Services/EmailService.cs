@@ -37,11 +37,11 @@ namespace TravelBooking.Infraestructure.Services
             try
             {
                 await smtpClient.SendMailAsync(mailMessage);
-                Console.WriteLine("Correo enviado exitosamente a: " + to);
+                Console.WriteLine("Email successfully sent to:" + to);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error al enviar el correo: {ex.Message}");
+                Console.WriteLine($"Error sending email: {ex.Message}");
                 throw;
             }
         }

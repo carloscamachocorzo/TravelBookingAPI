@@ -17,6 +17,15 @@ namespace TravelBooking.Application.Services
         private readonly IHotelRepository _hotelRepository;
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ReservationsAppService"/> class.
+        /// </summary>
+        /// <param name="reservations">The repository that manages reservations.</param>
+        /// <param name="reservationNotifierService">The service responsible for sending notifications related to reservations.</param>
+        /// <param name="roomRepository">The repository that manages room data.</param>
+        /// <param name="hotelRepository">The repository that manages hotel data.</param>
+        /// <param name="mapper">The instance of <see cref="IMapper"/> for mapping between entities and DTOs.</param>
+        /// <param name="userRepository">The repository that manages user data.</param>
         public ReservationsAppService(IReservationsRepository reservations, IReservationNotifierService reservationNotifierService,
             IRoomRepository roomRepository,
         IHotelRepository hotelRepository, IMapper mapper, IUserRepository userRepository)
