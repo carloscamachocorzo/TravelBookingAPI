@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 using TravelBooking.Application.Common;
 using TravelBooking.Application.Dtos.Hotels;
 using TravelBooking.Application.Services.Interfaces;
@@ -8,33 +10,26 @@ using TravelBooking.Infraestructure;
 
 namespace TravelBooking.Application.Services
 {
-    /// <summary>
-    /// Servicio de aplicación para la creación de hoteles.
-    /// Implementa la lógica necesaria para registrar nuevos hoteles en el sistema.
-    /// </summary>
     public class HotelAppService : IHotelAppService
     {
         private readonly IHotelRepository _hotelRepository;
         private readonly IRoomRepository _roomRepository;
         private readonly IMapper _mapper;
-        /// <summary>
-        /// Constructor para inicializar el servicio con el repositorio de hoteles.
-        /// </summary>
-        /// <param name="hotelRepository">
-        /// Instancia del repositorio de hoteles que se utiliza para persistir los datos.
-        /// </param>
-        public HotelAppService(IHotelRepository hotelRepository, IRoomRepository roomRepository, IMapper mapper)
+        private readonly ILogger<HotelAppService> _logger;
+        private string className = new StackFrame().GetMethod()?.ReflectedType?.Name ?? "HotelAppService";
+        public HotelAppService(IHotelRepository hotelRepository, IRoomRepository roomRepository, IMapper mapper, ILogger<HotelAppService> logger)
         {
             _hotelRepository = hotelRepository;
             _roomRepository = roomRepository;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task<RequestResult<CreateHotelResponseDto>> CreateHotel(CreateHotelDto request)
         {
             try
             {
-                // Crear una nueva entidad de hotel
+
                 var hotel = new Hotels
                 {
                     Name = request.Name,
@@ -47,9 +42,9 @@ namespace TravelBooking.Application.Services
                     MaxCapacity = request.MaxCapacity
                 };
 
-                // Guardar el hotel en el repositorio
+
                 await _hotelRepository.AddAsync(hotel);
-                // Si la creación fue exitosa
+
                 return RequestResult<CreateHotelResponseDto>.CreateSuccessful(new CreateHotelResponseDto
                 {
                     Id = hotel.HotelId,
@@ -118,7 +113,6 @@ namespace TravelBooking.Application.Services
             }
             catch (Exception ex)
             {
-                // Si ocurrió un error
                 return RequestResult<bool>.CreateError("Error al actualizar el hotel: " + ex.Message);
             }
 
@@ -157,11 +151,12 @@ namespace TravelBooking.Application.Services
                 }
 
                 var hotelDtos = _mapper.Map<List<CreateHotelResponseDto>>(hotels);
-
-                return RequestResult<List<CreateHotelResponseDto>>.CreateSuccessful(hotelDtos);
+                _logger.LogInformation("list of loaded hotels successfully");
+                return RequestResult<List<CreateHotelResponseDto>>.CreateSuccessful(hotelDtos, new List<string> { "list of loaded hotels" });
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, className, (new StackFrame().GetMethod())?.Name + (new StackFrame().GetFileLineNumber()));
                 return RequestResult<List<CreateHotelResponseDto>>.CreateError("Error retrieving hotels: " + ex.Message);
             }
         }

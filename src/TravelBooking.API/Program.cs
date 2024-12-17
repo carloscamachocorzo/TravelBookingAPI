@@ -1,6 +1,9 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using NLog;
+using NLog.Web;
+using System.Reflection;
 using TravelBooking.Application.DependecyInyection;
 using TravelBooking.Infraestructure.DataAccess.Contexts;
 using TravelBooking.Infraestructure.Services;
@@ -10,17 +13,21 @@ namespace TravelBooking.API
     public class Program
     {
         private const string _APINAME = "Hotel management";
+
         public static void Main(string[] args)
-        {
+        {            
+            
             var builder = WebApplication.CreateBuilder(args);
             // Configurar logging
             var loggerFactory = LoggerFactory.Create(builder =>
             {
                 builder.AddConsole();
                 builder.AddDebug();
-                builder.AddFile("Logs/travel-{Date}.txt");
+                builder.AddFile("Logs/myapp-{Date}.txt");
             });
             Microsoft.Extensions.Logging.ILogger loggerData = loggerFactory.CreateLogger<Program>();
+
+            var logger = LogManager.Setup().LoadConfigurationFromFile(String.Concat(AppDomain.CurrentDomain.BaseDirectory, "nlog.config")).GetCurrentClassLogger();
             // Configura la cadena de conexión
             builder.Services.AddDbContext<TravelBookingContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -46,6 +53,9 @@ namespace TravelBooking.API
                         Name = "Carlos Camacho Corzo"
                     }
                 });
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
             });
             var app = builder.Build();
 
