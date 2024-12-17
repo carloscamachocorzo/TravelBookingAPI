@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using TravelBooking.Application.Dtos.Hotels;
 using TravelBooking.Application.Dtos.Reservation;
+using TravelBooking.Application.Dtos.Rooms;
 using TravelBooking.Infraestructure;
 
 namespace TravelBooking.Application.Automapper
@@ -26,6 +27,9 @@ namespace TravelBooking.Application.Automapper
             .ForMember(dest => dest.NumberOfGuests, opt => opt.MapFrom(src => src.TotalGuests))  
             .ReverseMap(); // Habilita el mapeo en ambas direcciones 
 
+            // Configuración para mapear Room a RoomDto
+            CreateMap<Rooms, RoomResponseDto>()
+                .ForMember(dest => dest.HotelName, opt => opt.MapFrom(src => src.Hotel.Name));
 
         }
     }

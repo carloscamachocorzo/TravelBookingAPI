@@ -7,5 +7,6 @@ namespace TravelBooking.Domain.Interfaces
         Task AddRangeAsync(IEnumerable<Rooms> rooms);
         Task<Rooms?> GetByIdAsync(int roomId);
         Task UpdateAsync(Rooms room);
+        Task<Rooms> GetRoomByIdAsync(int roomId);
     }
 }

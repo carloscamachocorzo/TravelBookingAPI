@@ -66,5 +66,26 @@ namespace TravelBooking.API.Controllers
             }
             return StatusCode(500, RequestResult<bool>.CreateError(result.ErrorMessage));
         }
+        /// <summary>
+        /// Obtener información de una habitación específica
+        /// </summary>
+        /// <param name="roomId">ID de la habitación</param>
+        /// <returns>Información de la habitación</returns>
+        [HttpGet("{roomId}")]
+        public async Task<IActionResult> GetRoomById(int roomId)
+        {
+            // Llamar al servicio de la aplicación para obtener la información de la habitación
+            var result = await _roomAppService.GetRoomDetailsAsync(roomId);
+
+            if (result.IsSuccessful)
+            {
+                return Ok(result.Result);
+            }
+            else if (!result.IsError)
+            {
+                return NotFound(new { Message = "Room not found" });
+            }
+            return StatusCode(500, new { Message = "Error retrieving room details", Error = result.ErrorMessage });
+        }
     }
 }

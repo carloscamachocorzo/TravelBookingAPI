@@ -28,6 +28,12 @@ namespace TravelBooking.Infraestructure.Repositories
             _context.Rooms.Update(room);
             await _context.SaveChangesAsync();
         }
+        public async Task<Rooms> GetRoomByIdAsync(int roomId)
+        {
+            return await _context.Rooms
+                                 .Include(r => r.Hotel) 
+                                 .FirstOrDefaultAsync(r => r.RoomId == roomId);
+        }
 
     }
 }

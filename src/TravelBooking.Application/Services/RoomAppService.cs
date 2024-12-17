@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -15,10 +16,11 @@ namespace TravelBooking.Application.Services
     public class RoomAppService : IRoomAppService
     {
         private readonly IRoomRepository _roomRepository;
-
-        public RoomAppService(IRoomRepository roomRepository)
+        private readonly IMapper _mapper;
+        public RoomAppService(IRoomRepository roomRepository, IMapper mapper)
         {
             _roomRepository = roomRepository;
+            _mapper = mapper;
         }
         public async Task<RequestResult<bool>> ExecuteUpdateRoomAsync(UpdateRoomRequest request)
         {
@@ -67,12 +69,34 @@ namespace TravelBooking.Application.Services
                 return RequestResult<bool>.CreateError($"An error occurred while updating the room status: {ex.Message}");
             }
         }
+        public async Task<RequestResult<RoomResponseDto>> GetRoomDetailsAsync(int roomId)
+        {
+            try
+            {
+                // Obtener la habitación del repositorio
+                var room = await _roomRepository.GetRoomByIdAsync(roomId);
+
+                if (room == null)
+                {
+                    return RequestResult<RoomResponseDto>.CreateUnsuccessful(new List<string> { "Room not found" });
+                }
+
+                // Mapear la habitación a un DTO
+                var roomDto = _mapper.Map<RoomResponseDto>(room);
+
+                return RequestResult<RoomResponseDto>.CreateSuccessful(roomDto);
+            }
+            catch (Exception ex)
+            {
+                return RequestResult<RoomResponseDto>.CreateError($"Error retrieving room details: {ex.Message}");
+            }
+        }
         private void UpdateRoom(UpdateRoomRequest updateRoomRequest, Rooms rooms)
         {
-            rooms.Number=updateRoomRequest.Number;
-            rooms.Type=updateRoomRequest.Type;
+            rooms.Number = updateRoomRequest.Number;
+            rooms.Type = updateRoomRequest.Type;
             rooms.Location = updateRoomRequest.Location;
-            rooms.BaseCost=updateRoomRequest.BaseCost;
+            rooms.BaseCost = updateRoomRequest.BaseCost;
             rooms.Tax = updateRoomRequest.Tax;
             rooms.Status = updateRoomRequest.Status;
         }
