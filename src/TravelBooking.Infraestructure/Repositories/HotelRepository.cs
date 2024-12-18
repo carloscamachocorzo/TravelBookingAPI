@@ -39,31 +39,52 @@ namespace TravelBooking.Infraestructure.Repositories
         }
         public async Task<List<Hotels>> SearchHotelsAsync(DateOnly? checkInDate, DateOnly? checkOutDate, int? totalGuests, string? city)
         {
-            var query = _Context.Hotels.AsQueryable();
-
-            // Filtrar por ciudad
-            if (!string.IsNullOrEmpty(city))
+            try
             {
-                query = query.Where(h => h.City.Contains(city));
+                // Start building the query
+                var hotelQuery = _Context.Hotels.AsQueryable();
+
+                // Filter by city
+                if (!string.IsNullOrEmpty(city))
+                {
+                    hotelQuery = hotelQuery.Where(h => h.City.Contains(city));
+                }
+
+                // Filter by availability based on check-in and check-out dates
+                if (checkInDate.HasValue && checkOutDate.HasValue)
+                {
+                    if (checkInDate >= checkOutDate)
+                        throw new ArgumentException("Check-in date must be earlier than check-out date.");
+
+                    hotelQuery = hotelQuery.Where(h =>
+                        h.Rooms.Any(r =>
+                            !r.Reservations.Any(res =>
+                                res.CheckInDate < checkOutDate && res.CheckOutDate > checkInDate // Overlap check
+                            )
+                        )
+                    );
+                }
+
+                // Filter by capacity
+                if (totalGuests.HasValue)
+                {
+                    hotelQuery = hotelQuery.Where(h => h.Rooms.Any(r => r.Capacity >= totalGuests));
+                }
+
+                // Generate SQL for debugging purposes
+                var sql = hotelQuery.ToQueryString();
+                Console.WriteLine($"Generated SQL: {sql}");
+
+                // Execute the query and return the results
+                return await hotelQuery.ToListAsync();
             }
-            if (checkInDate != null && checkOutDate != null)
+            catch (Exception ex)
             {
-                // Filtrar por fechas
-                query = query.Where(h =>
-                    h.Rooms.Any(r => r.Reservations.Any(res =>
-                        (res.CheckInDate <= checkOutDate && res.CheckOutDate >= checkInDate) // Verifica si hay reservas que se solapan
-                    ))
-                );
+                // Log and rethrow exceptions for higher-level handling
+                Console.WriteLine($"Error in SearchHotelsAsync: {ex.Message}");
+                throw;
             }
 
-
-            // Filtrar por capacidad de personas (puedes ajustar según cómo se maneja la capacidad en tu modelo)
-            if (totalGuests != null)
-                query = query.Where(h => h.Rooms.Any(r => r.Capacity >= totalGuests));
-
-            // Ejecutar la consulta y devolver los resultados
-            return await query.ToListAsync();
         }
-
     }
 }

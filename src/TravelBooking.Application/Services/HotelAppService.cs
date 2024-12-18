@@ -171,29 +171,25 @@ namespace TravelBooking.Application.Services
         public async Task<RequestResult<List<SearchHotelResponseDto>>> SearchHotelsAsync(SearchHotelsDto searchHotelsDto)
         {
             try
-            {
-                // Realiza la búsqueda en el repositorio o base de datos
+            { 
                 var hotels = await _hotelRepository.SearchHotelsAsync(
                     searchHotelsDto.CheckInDate,
                     searchHotelsDto.CheckOutDate,
                     searchHotelsDto.NumberOfGuests,
                     searchHotelsDto.DestinationCity
                 );
-
-                // Si no se encuentran hoteles
+                 
                 if (hotels == null || !hotels.Any())
                 {
                     return RequestResult<List<SearchHotelResponseDto>>.CreateUnsuccessful(new List<string> { "No hotels found for the given criteria" });
                 }
-
-                // Mapear las entidades de Hotel a HotelDto
+                 
                 var hotelDtos = _mapper.Map<List<SearchHotelResponseDto>>(hotels);
 
                 return RequestResult<List<SearchHotelResponseDto>>.CreateSuccessful(hotelDtos);
             }
             catch (Exception ex)
-            {
-                // Manejo de errores
+            { 
                 return RequestResult<List<SearchHotelResponseDto>>.CreateError($"Error searching hotels: {ex.Message}");
             }
         }
