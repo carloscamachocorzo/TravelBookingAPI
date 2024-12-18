@@ -53,5 +53,9 @@ namespace TravelBooking.Infraestructure.Repositories
         {
             return await _context.Users.ToListAsync();
         }
+        public async Task<Users?> GetUserByUsernameAsync(string username)
+        {
+            return await _context.Users.SingleOrDefaultAsync(u => u.Username == username);
+        }
     }
 }

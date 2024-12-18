@@ -47,7 +47,7 @@ namespace TravelBooking.Application.Services
                     BaseRate = request.BaseRate,
                     Tax = request.Tax,
                     CreatedDate = DateTime.Now,
-                    MaxCapacity = request.MaxCapacity
+                    MaxCapacity = (int)request.MaxCapacity
                 };
 
 

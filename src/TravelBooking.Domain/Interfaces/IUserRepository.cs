@@ -41,6 +41,15 @@ namespace TravelBooking.Domain.Interfaces
         /// <returns>A task that represents the asynchronous operation. 
         /// The task result contains a list of all user entities.</returns>
         Task<List<Users>> GetAllAsync();
+        /// <summary>
+        /// Retrieves a user by their username.
+        /// </summary>
+        /// <param name="username">The username of the user to retrieve.</param>
+        /// <returns>
+        /// A task representing the asynchronous operation. The task result contains the user object 
+        /// if found; otherwise, <c>null</c>.
+        /// </returns>
+        Task<Users?> GetUserByUsernameAsync(string username);
     }
 
 }

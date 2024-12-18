@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Azure.Core;
+using MediatR;
 using TravelBooking.Application.Common;
 using TravelBooking.Application.Dtos.Users;
 using TravelBooking.Application.Services.Interfaces;
@@ -11,11 +13,12 @@ namespace TravelBooking.Application.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
-
-        public UserAppService(IUserRepository userRepository, IMapper mapper)
+        private readonly IJwtService _jwtService;
+        public UserAppService(IUserRepository userRepository, IMapper mapper, IJwtService jwtService)
         {
             _userRepository = userRepository;
             _mapper = mapper;
+            _jwtService = jwtService;
         }
 
         public async Task<RequestResult<UserDto>> CreateUserAsync(CreateUserDto createUserDto)
@@ -27,8 +30,15 @@ namespace TravelBooking.Application.Services
                 {
                     return RequestResult<UserDto>.CreateUnsuccessful(new[] { "Name and email are required." });
                 }
-
+                if (!IsValidEmail(createUserDto.Email))
+                {
+                    return RequestResult<UserDto>.CreateUnsuccessful(new[] { "The email provided is not valid." });
+                }
                 var userEntity = _mapper.Map<Users>(createUserDto);
+                // Hash the password
+                var (passwordHash, passwordSalt) = _jwtService.HashPassword(createUserDto.Password);
+                userEntity.PasswordHash = passwordHash;
+                userEntity.PasswordSalt = passwordSalt;
                 await _userRepository.CreateAsync(userEntity);
 
                 var userDto = _mapper.Map<UserDto>(userEntity);
@@ -76,6 +86,21 @@ namespace TravelBooking.Application.Services
                 return RequestResult<IEnumerable<UserDto>>.CreateError($"Error querying users: {ex.Message}");
             }
         }
+
+        #region Methods privates
+        private bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        #endregion
     }
 
 }

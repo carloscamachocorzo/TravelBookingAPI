@@ -6,6 +6,7 @@ using TravelBooking.Domain.Interfaces;
 using TravelBooking.Domain.Services;
 using TravelBooking.Domain.Services.Interfaces;
 using TravelBooking.Infraestructure.Repositories;
+using TravelBooking.Infraestructure.Security;
 using TravelBooking.Infraestructure.Services;
 
 namespace TravelBooking.Application.DependecyInyection
@@ -24,6 +25,7 @@ namespace TravelBooking.Application.DependecyInyection
             services.AddScoped<IRoomAppService, RoomAppService>(); // Room service
             services.AddScoped<IReservationsAppService, ReservationsAppService>(); // Reservations service
             services.AddScoped<IUserAppService, UserAppService>();
+            services.AddScoped<IAuthAppService, AuthAppService>();
             // Repositories
             services.AddScoped<IHotelRepository, HotelRepository>(); // Hotel repository
             services.AddScoped<IRoomRepository, RoomRepository>(); // Room repository
@@ -32,7 +34,7 @@ namespace TravelBooking.Application.DependecyInyection
 
             // Domain Services
             services.AddScoped<IReservationNotifierService, ReservationNotifierService>(); // Reservation notifier service
-
+            services.AddScoped<IJwtService, JwtService>();
             // Register email service
             services.AddTransient<IEmailService, EmailService>(); // Email service
 

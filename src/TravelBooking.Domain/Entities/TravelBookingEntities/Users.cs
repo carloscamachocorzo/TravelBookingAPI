@@ -19,5 +19,11 @@ public partial class Users
 
     public bool Status { get; set; }
 
+    public string Username { get; set; }
+
+    public byte[] PasswordHash { get; set; }
+
+    public byte[] PasswordSalt { get; set; }
+
     public virtual ICollection<Reservations> Reservations { get; set; } = new List<Reservations>();
 }

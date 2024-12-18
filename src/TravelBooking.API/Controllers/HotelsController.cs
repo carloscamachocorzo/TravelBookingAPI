@@ -1,4 +1,5 @@
 ﻿using Azure.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TravelBooking.Application.Common;
 using TravelBooking.Application.Dtos.Hotels;
@@ -153,6 +154,7 @@ namespace TravelBooking.API.Controllers
         /// - 404 (Not Found) if no hotels are found or the operation is unsuccessful.
         /// - 500 (Internal Server Error) if an error occurred during the operation.
         /// </returns>
+        [Authorize]
         [HttpGet("GetAllHotels")]
         public async Task<IActionResult> GetAllHotels()
         {
