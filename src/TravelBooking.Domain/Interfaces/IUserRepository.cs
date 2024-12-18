@@ -20,6 +20,27 @@ namespace TravelBooking.Domain.Interfaces
         /// <param name="userId">The unique identifier of the user.</param>
         /// <returns>A <see cref="Task{TResult}"/> representing the asynchronous operation, containing <c>true</c> if the user exists, otherwise <c>false</c>.</returns>
         Task<bool> ExistsAsync(int userId);
+        /// <summary>
+        /// Creates a new user in the repository.
+        /// </summary>
+        /// <param name="user">The user entity to be created.</param>
+        /// <returns>A task that represents the asynchronous operation. 
+        /// The task result contains the created user entity.</returns>
+        Task<Users> CreateAsync(Users user);
+
+        /// <summary>
+        /// Updates an existing user in the repository.
+        /// </summary>
+        /// <param name="user">The user entity with updated information.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
+        Task UpdateAsync(Users user);
+
+        /// <summary>
+        /// Retrieves all users from the repository.
+        /// </summary>
+        /// <returns>A task that represents the asynchronous operation. 
+        /// The task result contains a list of all user entities.</returns>
+        Task<List<Users>> GetAllAsync();
     }
 
 }

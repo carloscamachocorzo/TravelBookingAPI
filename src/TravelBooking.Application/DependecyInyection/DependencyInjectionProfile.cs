@@ -23,7 +23,7 @@ namespace TravelBooking.Application.DependecyInyection
             services.AddScoped<IHotelAppService, HotelAppService>(); // Hotel service
             services.AddScoped<IRoomAppService, RoomAppService>(); // Room service
             services.AddScoped<IReservationsAppService, ReservationsAppService>(); // Reservations service
-
+            services.AddScoped<IUserAppService, UserAppService>();
             // Repositories
             services.AddScoped<IHotelRepository, HotelRepository>(); // Hotel repository
             services.AddScoped<IRoomRepository, RoomRepository>(); // Room repository

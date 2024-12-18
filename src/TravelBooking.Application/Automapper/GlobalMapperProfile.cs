@@ -2,6 +2,7 @@
 using TravelBooking.Application.Dtos.Hotels;
 using TravelBooking.Application.Dtos.Reservation;
 using TravelBooking.Application.Dtos.Rooms;
+using TravelBooking.Application.Dtos.Users;
 using TravelBooking.Infraestructure;
 
 namespace TravelBooking.Application.Automapper
@@ -57,6 +58,10 @@ namespace TravelBooking.Application.Automapper
             CreateMap<Hotels, SearchHotelResponseDto>()
                 // Mapping for HotelName
                 .ForMember(dest => dest.HotelName, opt => opt.MapFrom(src => src.Name));
+
+            CreateMap<CreateUserDto, Users>();
+            CreateMap<UpdateUserDto, Users>();
+            CreateMap<Users, UserDto>();
         }
     }
 }

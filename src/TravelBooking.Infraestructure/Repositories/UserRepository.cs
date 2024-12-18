@@ -36,10 +36,22 @@ namespace TravelBooking.Infraestructure.Repositories
         /// <summary>
         /// Crea un nuevo usuario.
         /// </summary>
-        public async Task CreateAsync(Users user)
+        public async Task<Users> CreateAsync(Users user)
         {
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
+            return user;
+        }
+
+        public async Task UpdateAsync(Users user)
+        {
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<Users>> GetAllAsync()
+        {
+            return await _context.Users.ToListAsync();
         }
     }
 }
