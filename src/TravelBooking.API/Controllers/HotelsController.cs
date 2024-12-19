@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Filters;
 using System.Security.Claims;
+using TravelBooking.API.Examples;
 using TravelBooking.Application.Common;
 using TravelBooking.Application.Constants;
 using TravelBooking.Application.Dtos.Hotels;
+using TravelBooking.Application.Dtos.Users;
 using TravelBooking.Application.Services;
 using TravelBooking.Application.Services.Interfaces;
 
@@ -72,6 +75,8 @@ namespace TravelBooking.API.Controllers
         [Authorize]
         [Permission("AssignRoomsToHotel")]
         [HttpPost("{hotelId}/rooms")]
+        [SwaggerRequestExample(typeof(CreateRoomsRequest), typeof(CreateRoomsRequestDtoExample))]
+        [SwaggerResponseExample(200, typeof(CreateRoomsRequestDtoExample))]
         public async Task<IActionResult> AssignRoomsToHotel(int hotelId, [FromBody] CreateRoomsRequest request)
         {
             if (request.Rooms == null || !request.Rooms.Any())
