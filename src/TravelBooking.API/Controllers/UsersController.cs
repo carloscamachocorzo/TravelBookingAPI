@@ -31,10 +31,9 @@ namespace TravelBooking.API.Controllers
         /// <param name="createUserDto">The user data to create.</param>
         /// <remarks>
         /// **Roles Available:**
-        /// - **Admin**: Manage users, view reports, edit settings.
-        /// - **Travel Agent**: Book trips, view clients.
-        /// - **Traveler**: View trips.
-        ///
+        /// - **Admin**: "CreateHotel","AssignRoomsToHotel","UpdateHotel","UpdateHotelStatus","GetAllHotels","UpdateRoom","UpdateRoomStatus","CreateUser","UpdateUser","GetAllUsers","GetAllReservations","SearchHotels".
+        /// - **Travel Agent**:  "SearchHotels","CreateReservation","GetReservationById","NotifyReservation".
+        /// - **Traveler**: "SearchHotels","CreateReservation","GetReservationById"        ///
         /// **Validation Rules:**
         /// - `FirstName` and `LastName`: Required, max 50 characters.
         /// - `Email`: Required, must be a valid email.
