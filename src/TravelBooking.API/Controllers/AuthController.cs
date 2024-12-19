@@ -42,7 +42,7 @@ namespace TravelBooking.API.Controllers
 
             if (string.IsNullOrEmpty(token))
             {
-                return Unauthorized(new { message = "Credenciales inválidas" });
+                return Unauthorized(new { message = "Invalid credentials" });
             }
 
             return Ok(new { Token = token, TokenType = "Bearer" });

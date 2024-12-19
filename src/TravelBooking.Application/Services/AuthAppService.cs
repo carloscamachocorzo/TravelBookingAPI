@@ -29,7 +29,7 @@ namespace TravelBooking.Application.Services
             try
             {
                 // 1. Validate credentials against the domain layer
-                var user =  await _userRepository.GetUserByUsernameAsync(username);
+                var user = await _userRepository.GetUserByUsernameAsync(username);
                 if (user == null)
                     return string.Empty;
 
@@ -37,7 +37,7 @@ namespace TravelBooking.Application.Services
                 bool isValid = VerifyPassword(password, user.PasswordHash, user.PasswordSalt);
                 if (isValid)
                 {
-                    return _tokenService.GenerateToken(user.Username);
+                    return _tokenService.GenerateToken(user.Username, user.Role);
                 }
                 return string.Empty;
             }

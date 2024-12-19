@@ -1,7 +1,8 @@
-﻿using Azure.Core;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using TravelBooking.Application.Common;
+using TravelBooking.Application.Constants;
 using TravelBooking.Application.Dtos.Hotels;
 using TravelBooking.Application.Services.Interfaces;
 
@@ -37,9 +38,17 @@ namespace TravelBooking.API.Controllers
         /// - 400 (Bad Request) if the operation is unsuccessful but without errors.
         /// - 500 (Internal Server Error) if an error occurred during the operation.
         /// </returns>
+        [Authorize]
         [HttpPost("create")]
         public async Task<IActionResult> CreateHotel([FromBody] CreateHotelDto request)
         {
+            // Get the role of the decoded token
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            if (!RolePermissions.HasPermission(role, "CreateHotel"))
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, new { Message = "You do not have permission to create hotels." });
+            }
 
             var result = await _hotelAppService.CreateHotel(request);
 
