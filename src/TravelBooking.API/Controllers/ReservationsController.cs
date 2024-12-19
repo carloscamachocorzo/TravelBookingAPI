@@ -76,14 +76,14 @@ namespace TravelBooking.API.Controllers
 
             if (result.IsSuccessful)
             {
-                return Ok(RequestResult<ReservationDetailsDto>.CreateSuccessful(result.Result));
+                return Ok(RequestResult<ReservationDetailsResponseDto>.CreateSuccessful(result.Result));
             }
             else if (!result.IsError)
             {
-                return NotFound(RequestResult<ReservationDetailsDto>.CreateUnsuccessful(result.Messages));
+                return NotFound(RequestResult<ReservationDetailsResponseDto>.CreateUnsuccessful(result.Messages));
             }
 
-            return StatusCode(500, RequestResult<ReservationDetailsDto>.CreateError(result.ErrorMessage));
+            return StatusCode(500, RequestResult<ReservationDetailsResponseDto>.CreateError(result.ErrorMessage));
         }
 
         /// <summary>
@@ -113,14 +113,14 @@ namespace TravelBooking.API.Controllers
 
             if (result.IsSuccessful)
             {
-                return CreatedAtAction(nameof(GetReservationById), new { reservationId = result.Result.ReservationId }, RequestResult<ReservationDetailsDto>.CreateSuccessful(result.Result));
+                return CreatedAtAction(nameof(GetReservationById), new { reservationId = result.Result.ReservationId }, RequestResult<ReservationDetailsResponseDto>.CreateSuccessful(result.Result));
             }
             else if (!result.IsError)
             {
-                return BadRequest(RequestResult<ReservationDetailsDto>.CreateUnsuccessful(result.Messages));
+                return BadRequest(RequestResult<ReservationDetailsResponseDto>.CreateUnsuccessful(result.Messages));
             }
 
-            return StatusCode(500, RequestResult<ReservationDetailsDto>.CreateError(result.ErrorMessage));
+            return StatusCode(500, RequestResult<ReservationDetailsResponseDto>.CreateError(result.ErrorMessage));
         }
         /// <summary>
         /// Sends a notification for a specific reservation.

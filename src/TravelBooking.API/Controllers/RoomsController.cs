@@ -48,12 +48,9 @@ namespace TravelBooking.API.Controllers
         public async Task<IActionResult> UpdateRoom(int roomId, [FromBody] UpdateRoomRequest request)
         {
             if (request == null)
-                return BadRequest("The request cannot be empty.");
+                return BadRequest("The request cannot be empty.");             
 
-            if (roomId != request.RoomId)
-                return BadRequest("The room ID does not match.");
-            
-            var result = await _roomAppService.ExecuteUpdateRoomAsync(request);
+            var result = await _roomAppService.ExecuteUpdateRoomAsync(roomId, request);
             if (result.IsSuccessful)
             {
                 return Ok(result);

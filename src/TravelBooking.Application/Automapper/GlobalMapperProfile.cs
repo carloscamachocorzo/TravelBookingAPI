@@ -18,13 +18,13 @@ namespace TravelBooking.Application.Automapper
             CreateMap<Hotels, UpdateHotelDto>().ReverseMap();
 
             // Mapping from Reservations to ReservationDetailsDto
-            CreateMap<Reservations, ReservationDetailsDto>()
+            CreateMap<Reservations, ReservationDetailsResponseDto>()
                 .ForMember(dest => dest.HotelName,
                            opt => opt.MapFrom(src => src.Room != null ? src.Room.Hotel.Name : null))
                 .ForMember(dest => dest.RoomName,
                            opt => opt.MapFrom(src => src.Room != null ? src.Room.Number : null));
 
-            CreateMap<Reservations, ReservationDetailsDto>()
+            CreateMap<Reservations, ReservationDetailsResponseDto>()
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.FirstName))
                 .ForMember(dest => dest.HotelId, opt => opt.MapFrom(src => src.Room.HotelId))
                 .ForMember(dest => dest.HotelName, opt => opt.MapFrom(src => src.Room.Hotel.Name))
@@ -44,7 +44,7 @@ namespace TravelBooking.Application.Automapper
                 .ForMember(dest => dest.RoomType, opt => opt.MapFrom(src => src.Type))
 
                 // Mapping for Rate as the sum of BaseCost and Tax
-                .ForMember(dest => dest.Rate, opt => opt.MapFrom(src => src.BaseCost + src.Tax))
+                .ForMember(dest => dest.Rate, opt => opt.MapFrom(src => src.baseRate + src.Tax))
 
                 // Mapping for IsAvailable based on the room's status
                 .ForMember(dest => dest.IsAvailable, opt => opt.MapFrom(src => src.Status));

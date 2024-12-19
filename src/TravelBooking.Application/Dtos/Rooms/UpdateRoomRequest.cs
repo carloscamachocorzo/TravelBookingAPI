@@ -4,12 +4,7 @@
     /// Represents a request DTO to update the details of a room.
     /// </summary>
     public class UpdateRoomRequest
-    {
-        /// <summary>
-        /// The unique identifier for the room.
-        /// </summary>
-        public int RoomId { get; set; }
-
+    { 
         /// <summary>
         /// The number or name of the room (e.g., "101", "Deluxe Suite").
         /// </summary>
@@ -28,7 +23,7 @@
         /// <summary>
         /// The base cost per night for the room before tax.
         /// </summary>
-        public decimal BaseCost { get; set; }
+        public decimal BaseRate { get; set; }
 
         /// <summary>
         /// The tax rate applied to the room cost.
@@ -39,6 +34,10 @@
         /// The availability status of the room (e.g., available, occupied, etc.).
         /// </summary>
         public bool Status { get; set; }
+        /// <summary>
+        /// Gets or sets the maximum number of guests that the room can accommodate.
+        /// </summary>
+        public int MaxCapacity { get; set; }
     }
 
 }

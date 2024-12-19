@@ -11,7 +11,7 @@ namespace TravelBooking.Application.Services.Interfaces
         /// <param name="request">The room update request containing the details to be updated.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation. The result contains a <see cref="RequestResult{T}"/> indicating whether the operation was successful.</returns>
 
-        Task<RequestResult<bool>> ExecuteUpdateRoomAsync(UpdateRoomRequest request);
+        Task<RequestResult<bool>> ExecuteUpdateRoomAsync(int roomId, UpdateRoomRequest request);
         // <summary>
         /// Updates the status of a room.
         /// </summary>

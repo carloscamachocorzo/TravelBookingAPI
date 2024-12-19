@@ -25,7 +25,8 @@
                     "CreateUser",
                     "UpdateUser",
                     "GetAllUsers",
-                    "GetAllReservations"
+                    "GetAllReservations",
+                    "SearchHotels"
                 }
             },
             { UserRoles.TravelAgent, new List<string>

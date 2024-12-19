@@ -74,7 +74,7 @@ namespace TravelBooking.Application.Services
             }
 
         }
-        public async Task<RequestResult<ReservationDetailsDto>> GetReservationByIdAsync(int reservationId)
+        public async Task<RequestResult<ReservationDetailsResponseDto>> GetReservationByIdAsync(int reservationId)
         {
             try
             {
@@ -82,44 +82,50 @@ namespace TravelBooking.Application.Services
 
                 if (reservation == null)
                 {
-                    return RequestResult<ReservationDetailsDto>.CreateError($"Reservation with ID {reservationId} not found.");
+                    return RequestResult<ReservationDetailsResponseDto>.CreateError($"Reservation with ID {reservationId} not found.");
                 }
 
-                var reservationDto = _mapper.Map<ReservationDetailsDto>(reservation);
+                var reservationDto = _mapper.Map<ReservationDetailsResponseDto>(reservation);
 
-                return RequestResult<ReservationDetailsDto>.CreateSuccessful(reservationDto);
+                return RequestResult<ReservationDetailsResponseDto>.CreateSuccessful(reservationDto);
             }
             catch (Exception ex)
             {
-                return RequestResult<ReservationDetailsDto>.CreateError($"An error occurred while retrieving the reservation: {ex.Message}");
+                return RequestResult<ReservationDetailsResponseDto>.CreateError($"An error occurred while retrieving the reservation: {ex.Message}");
             }
         }
-        public async Task<RequestResult<ReservationDetailsDto>> CreateReservationAsync(CreateReservationDto createReservationDto)
+        public async Task<RequestResult<ReservationDetailsResponseDto>> CreateReservationAsync(CreateReservationDto createReservationDto)
         {
             try
             {
-                // Validar existencia del usuario
+                // Validate user existence
                 var user = await _userRepository.GetByIdAsync(createReservationDto.UserId);
                 if (user == null)
                 {
-                    return RequestResult<ReservationDetailsDto>.CreateError($"User with ID {createReservationDto.UserId} not found.");
+                    return RequestResult<ReservationDetailsResponseDto>.CreateError($"User with ID {createReservationDto.UserId} not found.");
                 }
 
-                // Validar existencia de la habitación
+                // Validate room existence
                 var room = await _roomRepository.GetByIdAsync(createReservationDto.RoomId);
                 if (room == null)
                 {
-                    return RequestResult<ReservationDetailsDto>.CreateError($"Room with ID {createReservationDto.RoomId} not found.");
+                    return RequestResult<ReservationDetailsResponseDto>.CreateError($"Room with ID {createReservationDto.RoomId} not found.");
                 }
 
-                if (room.Capacity < createReservationDto.TotalGuests)
+                if (room.MaxCapacity < createReservationDto.TotalGuests)
                 {
-                    return RequestResult<ReservationDetailsDto>.CreateError($"Room capacity ({room.Capacity}) is less than the total guests.");
+                    return RequestResult<ReservationDetailsResponseDto>.CreateError($"Room capacity ({room.MaxCapacity}) is less than the total guests.");
                 }
 
-                // Calcular el costo total
+                // Calculate the total number of days
                 var totalDays = (createReservationDto.CheckOutDate.ToDateTime(TimeOnly.MinValue) - createReservationDto.CheckInDate.ToDateTime(TimeOnly.MinValue)).Days;
-                var totalCost = room.BaseCost * totalDays;
+
+                // Calculate the daily cost including tax
+                var dailyRateWithTax = room.baseRate + (room.baseRate * room.Tax); 
+
+                // Calculate the total cost by multiplying by the days
+                var totalCost = dailyRateWithTax * totalDays;
+
 
                 // Crear entidad de reserva
                 var reservation = new Reservations
@@ -154,13 +160,13 @@ namespace TravelBooking.Application.Services
                 await _reservationsRepository.CreateAsync(reservation);
                 reservation.Room = room;
                 // Mapear la reserva al DTO de respuesta
-                var reservationDetails = _mapper.Map<ReservationDetailsDto>(reservation);
+                var reservationDetails = _mapper.Map<ReservationDetailsResponseDto>(reservation);
 
-                return RequestResult<ReservationDetailsDto>.CreateSuccessful(reservationDetails);
+                return RequestResult<ReservationDetailsResponseDto>.CreateSuccessful(reservationDetails);
             }
             catch (Exception ex)
             {
-                return RequestResult<ReservationDetailsDto>.CreateError($"An error occurred while creating the reservation: {ex.Message}");
+                return RequestResult<ReservationDetailsResponseDto>.CreateError($"An error occurred while creating the reservation: {ex.Message}");
             }
         }
         public async Task ExecuteNotifyReservationAsync(int reservationId)

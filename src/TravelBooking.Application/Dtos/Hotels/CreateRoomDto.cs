@@ -23,7 +23,7 @@
         /// <summary>
         /// The base cost of the room, excluding taxes.
         /// </summary>
-        public decimal BaseCost { get; set; }
+        public decimal BaseRate { get; set; }
 
         /// <summary>
         /// The tax applied to the base cost of the room.
@@ -34,6 +34,10 @@
         /// Indicates whether the room is available or not.
         /// </summary>
         public bool Status { get; set; }
+        /// <summary>
+        /// Gets or sets the maximum number of guests that the room can accommodate.
+        /// </summary>
+        public int MaxCapacity { get; set; }
     }
 
 }

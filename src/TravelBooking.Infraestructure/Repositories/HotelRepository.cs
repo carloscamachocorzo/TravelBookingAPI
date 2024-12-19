@@ -42,7 +42,7 @@ namespace TravelBooking.Infraestructure.Repositories
             try
             {
                 // Start building the query
-                var hotelQuery = _Context.Hotels.AsQueryable();
+                var hotelQuery = _Context.Hotels.Include(r => r.Rooms).ThenInclude(r=> r.Reservations).AsQueryable();
 
                 // Filter by city
                 if (!string.IsNullOrEmpty(city))
@@ -55,11 +55,12 @@ namespace TravelBooking.Infraestructure.Repositories
                 {
                     if (checkInDate >= checkOutDate)
                         throw new ArgumentException("Check-in date must be earlier than check-out date.");
-
+                    
                     hotelQuery = hotelQuery.Where(h =>
                         h.Rooms.Any(r =>
                             !r.Reservations.Any(res =>
-                                res.CheckInDate < checkOutDate && res.CheckOutDate > checkInDate // Overlap check
+                                //res.CheckInDate <= checkOutDate && res.CheckOutDate >= checkInDate // Overlap check
+                                checkInDate < res.CheckOutDate && checkOutDate > res.CheckInDate
                             )
                         )
                     );
@@ -68,7 +69,7 @@ namespace TravelBooking.Infraestructure.Repositories
                 // Filter by capacity
                 if (totalGuests.HasValue)
                 {
-                    hotelQuery = hotelQuery.Where(h => h.Rooms.Any(r => r.Capacity >= totalGuests));
+                    hotelQuery = hotelQuery.Where(h => h.Rooms.Any(r => r.MaxCapacity >= totalGuests && r.Status));
                 }
 
                 // Generate SQL for debugging purposes

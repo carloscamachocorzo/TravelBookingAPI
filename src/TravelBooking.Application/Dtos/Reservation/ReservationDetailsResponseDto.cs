@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents the detailed information for a reservation.
     /// </summary>
-    public class ReservationDetailsDto
+    public class ReservationDetailsResponseDto
     {
         /// <summary>
         /// The unique identifier for the reservation.

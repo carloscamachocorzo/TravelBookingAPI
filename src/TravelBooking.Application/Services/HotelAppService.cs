@@ -86,10 +86,11 @@ namespace TravelBooking.Application.Services
                     Number = roomDto.Number,
                     Type = roomDto.Type,
                     Location = roomDto.Location,
-                    BaseCost = roomDto.BaseCost,
+                    baseRate = roomDto.BaseRate,
                     Tax = roomDto.Tax,
                     HotelId = hotelId,
                     Status = roomDto.Status,
+                    MaxCapacity = roomDto.MaxCapacity
                 }).ToList();
 
                 await _roomRepository.AddRangeAsync(rooms);
@@ -171,25 +172,51 @@ namespace TravelBooking.Application.Services
         public async Task<RequestResult<List<SearchHotelResponseDto>>> SearchHotelsAsync(SearchHotelsDto searchHotelsDto)
         {
             try
-            { 
+            {
                 var hotels = await _hotelRepository.SearchHotelsAsync(
                     searchHotelsDto.CheckInDate,
                     searchHotelsDto.CheckOutDate,
                     searchHotelsDto.NumberOfGuests,
                     searchHotelsDto.DestinationCity
                 );
-                 
+
                 if (hotels == null || !hotels.Any())
                 {
                     return RequestResult<List<SearchHotelResponseDto>>.CreateUnsuccessful(new List<string> { "No hotels found for the given criteria" });
                 }
-                 
-                var hotelDtos = _mapper.Map<List<SearchHotelResponseDto>>(hotels);
+
+
+                var hotelDtos = hotels.Select(hotel => new SearchHotelResponseDto
+                {
+                    HotelName = hotel.Name,
+                    Address = hotel.Address,
+                    City = hotel.City,
+                    BaseRate = hotel.BaseRate,
+                    Tax = hotel.Tax,
+                    Rooms = hotel.Rooms
+                            .Where(r =>
+                            r.MaxCapacity >= searchHotelsDto.NumberOfGuests &&
+                            r.Status &&
+                            !r.Reservations.Any(reservation =>
+                                searchHotelsDto.CheckInDate < reservation.CheckOutDate &&
+                                searchHotelsDto.CheckOutDate > reservation.CheckInDate))
+                            .Select(room => new SearchHotelRoomResponseDto
+                            {
+                                Number = room.Number,
+                                Type = room.Type,
+                                MaxCapacity = room.MaxCapacity,
+                                Location = room.Location,
+                                BaseRate = room.baseRate,
+                                Tax = room.Tax,
+                                Status = room.Status
+                            })
+                            .ToList()
+                }).ToList();
 
                 return RequestResult<List<SearchHotelResponseDto>>.CreateSuccessful(hotelDtos);
             }
             catch (Exception ex)
-            { 
+            {
                 return RequestResult<List<SearchHotelResponseDto>>.CreateError($"Error searching hotels: {ex.Message}");
             }
         }

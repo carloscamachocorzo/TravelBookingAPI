@@ -29,6 +29,10 @@
         /// The tax applied to the base rate of the room.
         /// </summary>
         public decimal Tax { get; set; }
+        /// <summary>
+        /// List of rooms in the hotel.
+        /// </summary>
+        public List<SearchHotelRoomResponseDto> Rooms { get; set; }
     }
 
 }

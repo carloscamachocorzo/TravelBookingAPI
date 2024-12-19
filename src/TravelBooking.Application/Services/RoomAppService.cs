@@ -28,16 +28,16 @@ namespace TravelBooking.Application.Services
             _roomRepository = roomRepository;
             _mapper = mapper;
         }
-        public async Task<RequestResult<bool>> ExecuteUpdateRoomAsync(UpdateRoomRequest request)
+        public async Task<RequestResult<bool>> ExecuteUpdateRoomAsync(int roomId, UpdateRoomRequest request)
         {
             try
             {
                 // Validar si la habitación existe
-                var room = await _roomRepository.GetByIdAsync(request.RoomId);
+                var room = await _roomRepository.GetByIdAsync(roomId);
                 if (room == null)
-                    throw new KeyNotFoundException($"No se encontró una habitación con ID {request.RoomId}");
+                    throw new KeyNotFoundException($"No room found with ID: {roomId}");
 
-                // Actualizar la habitación
+                // Update the room
                 UpdateRoom(request, room);
 
                 // Guardar los cambios
@@ -102,9 +102,10 @@ namespace TravelBooking.Application.Services
             rooms.Number = updateRoomRequest.Number;
             rooms.Type = updateRoomRequest.Type;
             rooms.Location = updateRoomRequest.Location;
-            rooms.BaseCost = updateRoomRequest.BaseCost;
+            rooms.baseRate = updateRoomRequest.BaseRate;
             rooms.Tax = updateRoomRequest.Tax;
             rooms.Status = updateRoomRequest.Status;
+            rooms.MaxCapacity = updateRoomRequest.MaxCapacity;
         }
     }
 }

@@ -26,14 +26,14 @@ namespace TravelBooking.Application.Services.Interfaces
         /// </summary>
         /// <param name="reservationId">The unique identifier of the reservation.</param>
         /// <returns>The details of the specified reservation.</returns>
-        Task<RequestResult<ReservationDetailsDto>> GetReservationByIdAsync(int reservationId);
+        Task<RequestResult<ReservationDetailsResponseDto>> GetReservationByIdAsync(int reservationId);
 
         /// <summary>
         /// Creates a new reservation.
         /// </summary>
         /// <param name="createReservationDto">The details of the reservation to create.</param>
         /// <returns>The details of the newly created reservation.</returns>
-        Task<RequestResult<ReservationDetailsDto>> CreateReservationAsync(CreateReservationDto createReservationDto);
+        Task<RequestResult<ReservationDetailsResponseDto>> CreateReservationAsync(CreateReservationDto createReservationDto);
     }
 
 }

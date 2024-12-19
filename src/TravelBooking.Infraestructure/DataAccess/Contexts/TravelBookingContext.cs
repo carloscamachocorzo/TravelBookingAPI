@@ -120,7 +120,6 @@ public partial class TravelBookingContext : DbContext
         {
             entity.HasKey(e => e.RoomId).HasName("PK__Rooms__32863939D5F3D5FB");
 
-            entity.Property(e => e.BaseCost).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.Location)
                 .IsRequired()
                 .HasMaxLength(200);
@@ -132,6 +131,7 @@ public partial class TravelBookingContext : DbContext
             entity.Property(e => e.Type)
                 .IsRequired()
                 .HasMaxLength(50);
+            entity.Property(e => e.baseRate).HasColumnType("decimal(18, 2)");
 
             entity.HasOne(d => d.Hotel).WithMany(p => p.Rooms)
                 .HasForeignKey(d => d.HotelId)

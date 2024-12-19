@@ -15,13 +15,13 @@ public partial class Rooms
 
     public string Location { get; set; }
 
-    public decimal BaseCost { get; set; }
+    public decimal baseRate { get; set; }
 
     public decimal Tax { get; set; }
 
     public bool Status { get; set; }
 
-    public int Capacity { get; set; }
+    public int MaxCapacity { get; set; }
 
     public virtual Hotels Hotel { get; set; }
 
