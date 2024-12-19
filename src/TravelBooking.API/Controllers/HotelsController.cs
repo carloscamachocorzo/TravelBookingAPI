@@ -4,6 +4,7 @@ using System.Security.Claims;
 using TravelBooking.Application.Common;
 using TravelBooking.Application.Constants;
 using TravelBooking.Application.Dtos.Hotels;
+using TravelBooking.Application.Services;
 using TravelBooking.Application.Services.Interfaces;
 
 namespace TravelBooking.API.Controllers
@@ -39,16 +40,11 @@ namespace TravelBooking.API.Controllers
         /// - 500 (Internal Server Error) if an error occurred during the operation.
         /// </returns>
         [Authorize]
+        [Permission("CreateHotel")]
         [HttpPost("create")]
         public async Task<IActionResult> CreateHotel([FromBody] CreateHotelDto request)
         {
-            // Get the role of the decoded token
-            var role = User.FindFirst(ClaimTypes.Role)?.Value;
-
-            if (!RolePermissions.HasPermission(role, "CreateHotel"))
-            {
-                return StatusCode(StatusCodes.Status403Forbidden, new { Message = "You do not have permission to create hotels." });
-            }
+             
 
             var result = await _hotelAppService.CreateHotel(request);
 
@@ -73,6 +69,8 @@ namespace TravelBooking.API.Controllers
         /// - 400 (Bad Request) if the request is invalid or the operation is unsuccessful.
         /// - 500 (Internal Server Error) if an error occurred during the operation.
         /// </returns>
+        [Authorize]
+        [Permission("AssignRoomsToHotel")]
         [HttpPost("{hotelId}/rooms")]
         public async Task<IActionResult> AssignRoomsToHotel(int hotelId, [FromBody] CreateRoomsRequest request)
         {
@@ -103,6 +101,8 @@ namespace TravelBooking.API.Controllers
         /// - 400 (Bad Request) if the request is invalid or the operation is unsuccessful.
         /// - 500 (Internal Server Error) if an error occurred during the operation.
         /// </returns>
+        [Authorize]
+        [Permission("UpdateHotel")]
         [HttpPut("{hotelId}")]
         public async Task<IActionResult> UpdateHotel(int hotelId, [FromBody] UpdateHotelDto updateHotelDto)
         {
@@ -134,6 +134,8 @@ namespace TravelBooking.API.Controllers
         /// - 400 (Bad Request) if the request is invalid or the operation is unsuccessful.
         /// - 500 (Internal Server Error) if an error occurred during the operation.
         /// </returns>
+        [Authorize]
+        [Permission("UpdateHotelStatus")]
         [HttpPatch("{hotelId}/status")]
         public async Task<IActionResult> UpdateHotelStatus(int hotelId, [FromBody] UpdateHotelStatusDto request)
         {
@@ -164,6 +166,7 @@ namespace TravelBooking.API.Controllers
         /// - 500 (Internal Server Error) if an error occurred during the operation.
         /// </returns>
         [Authorize]
+        [Permission("GetAllHotels")]
         [HttpGet("GetAllHotels")]
         public async Task<IActionResult> GetAllHotels()
         {
@@ -190,6 +193,8 @@ namespace TravelBooking.API.Controllers
         /// - 200 (OK) with a list of hotels that match the criteria if the operation is successful.
         /// - 400 (Bad Request) if the request is invalid or the operation is unsuccessful.
         /// </returns>
+        [Authorize]
+        [Permission("SearchHotels")]
         [HttpGet("search")]
         public async Task<IActionResult> SearchHotels([FromQuery] SearchHotelsDto searchHotelsDto)
         {

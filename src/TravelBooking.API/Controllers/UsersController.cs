@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TravelBooking.Application.Common;
 using TravelBooking.Application.Constants;
 using TravelBooking.Application.Dtos.Users;
+using TravelBooking.Application.Services;
 using TravelBooking.Application.Services.Interfaces;
 
 namespace TravelBooking.API.Controllers
@@ -40,7 +42,8 @@ namespace TravelBooking.API.Controllers
         /// - `Role`: Required, must be one of the allowed roles (`Admin`, `TravelAgent`, `Traveler`).
         /// - `Status`: Required, must be true or false.
         /// </remarks>
-
+        [Authorize]
+        [Permission("CreateUser")]
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserDto createUserDto)
         {
@@ -79,7 +82,8 @@ namespace TravelBooking.API.Controllers
         /// A <see cref="NoContentResult"/> if the update is successful, 
         /// or a <see cref="NotFoundResult"/> if the user does not exist.
         /// </returns>
-
+        [Authorize]
+        [Permission("UpdateUser")]
         [HttpPut("{userId}")]
         public async Task<IActionResult> UpdateUser(int userId, [FromBody] UpdateUserDto updateUserDto)
         {
@@ -95,6 +99,8 @@ namespace TravelBooking.API.Controllers
         /// <returns>
         /// An <see cref="OkObjectResult"/> containing a list of all users.
         /// </returns>
+        [Authorize]
+        [Permission("GetAllUsers")]
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {

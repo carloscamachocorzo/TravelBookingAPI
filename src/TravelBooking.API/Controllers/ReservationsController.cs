@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TravelBooking.Application.Common;
 using TravelBooking.Application.Dtos.Hotels;
 using TravelBooking.Application.Dtos.Reservation;
+using TravelBooking.Application.Services;
 using TravelBooking.Application.Services.Interfaces;
 
 namespace TravelBooking.API.Controllers
@@ -39,6 +41,8 @@ namespace TravelBooking.API.Controllers
         /// - 400 (Bad Request) if the operation is unsuccessful but no error occurred.
         /// - 500 (Internal Server Error) if an unexpected error occurred during the operation.
         /// </returns>
+        [Authorize]
+        [Permission("GetAllReservations")]
         [HttpGet]
         public async Task<IActionResult> GetAllReservations()
         {
@@ -63,6 +67,8 @@ namespace TravelBooking.API.Controllers
         /// - 404 (Not Found) if the reservation is not found or the operation is unsuccessful.
         /// - 500 (Internal Server Error) if an unexpected error occurred during the operation.
         /// </returns>
+        [Authorize]
+        [Permission("GetReservationById")]
         [HttpGet("{reservationId}")]
         public async Task<IActionResult> GetReservationById(int reservationId)
         {
@@ -93,6 +99,8 @@ namespace TravelBooking.API.Controllers
         /// <remarks>
         /// If the reservation is successfully created, the response includes a "Location" header with the URL to retrieve the newly created reservation.
         /// </remarks> 
+        [Authorize]
+        [Permission("CreateReservation")]
         [HttpPost("create")]
         public async Task<IActionResult> CreateReservation([FromBody] CreateReservationDto createReservationDto)
         {
@@ -115,18 +123,21 @@ namespace TravelBooking.API.Controllers
             return StatusCode(500, RequestResult<ReservationDetailsDto>.CreateError(result.ErrorMessage));
         }
         /// <summary>
-        /// Sends a notification for the specified reservation.
+        /// Sends a notification for a specific reservation.
         /// </summary>
         /// <param name="reservationId">The unique identifier of the reservation to notify.</param>
         /// <returns>
-        /// An <see cref="IActionResult"/> containing the result of the operation:
-        /// - 200 (OK) with a success message if the notification was sent successfully.
-        /// - 404 (Not Found) if the reservation was not found.
-        /// - 500 (Internal Server Error) if an unexpected error occurred during the operation.
+        /// An <see cref="IActionResult"/> indicating the result of the operation:
+        /// - <see cref="OkObjectResult"/> with a success message if the notification is sent successfully.
+        /// - <see cref="NotFoundObjectResult"/> if the reservation is not found.
+        /// - <see cref="ObjectResult"/> with status code 500 if an internal server error occurs.
         /// </returns>
         /// <remarks>
-        /// This method is used to notify the customer or relevant parties about the reservation.
+        /// This action is protected by the <see cref="AuthorizeAttribute"/> to require authentication
+        /// and the <see cref="PermissionAttribute"/> to ensure the user has the "NotifyReservation" permission.
         /// </remarks>
+        [Authorize]
+        [Permission("NotifyReservation")]
         [HttpPost("{reservationId}/notify")]
         public async Task<IActionResult> NotifyReservation(int reservationId)
         {
