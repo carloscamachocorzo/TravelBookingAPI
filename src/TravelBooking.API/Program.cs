@@ -1,11 +1,9 @@
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NLog;
-using NLog.Web;
 using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
 using System.Text;
@@ -102,6 +100,36 @@ namespace TravelBooking.API
                         ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
                         ValidAudience = builder.Configuration["JwtSettings:Audience"],
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:SecretKey"]))
+                    };
+                    // Personalization of unauthorized responses
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnChallenge = context =>
+                        {
+                            // Avoid the default response
+                            context.HandleResponse();
+
+                            // Personalizar la respuesta
+                            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                            context.Response.ContentType = "application/json";
+                            return context.Response.WriteAsync(System.Text.Json.JsonSerializer.Serialize(new
+                            {
+                                Code = 401,
+                                Message = "Unauthorized: Token is invalid or expired.",
+                                Details = context.ErrorDescription ?? "Authentication failed. Please check your credentials."
+                            }));
+                        },
+                        OnAuthenticationFailed = context =>
+                        {
+                            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                            context.Response.ContentType = "application/json";
+                            return context.Response.WriteAsync(System.Text.Json.JsonSerializer.Serialize(new
+                            {
+                                Code = 401,
+                                Message = "Authentication failed.",
+                                Details = context.Exception?.Message
+                            }));
+                        }
                     };
                 });
             builder.Services.AddAuthorization();
