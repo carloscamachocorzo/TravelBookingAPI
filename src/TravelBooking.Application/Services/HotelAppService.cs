@@ -92,7 +92,8 @@ namespace TravelBooking.Application.Services
                     Status = roomDto.Status,
                     MaxCapacity = roomDto.MaxCapacity
                 }).ToList();
-
+                hotel.MaxCapacity = hotel.MaxCapacity + request.Rooms.Sum(r => r.MaxCapacity);
+                await _hotelRepository.UpdateAsync(hotel);
                 await _roomRepository.AddRangeAsync(rooms);
 
                 return RequestResult<bool>.CreateSuccessful(true, new List<string> { "Room assignment done successfully" });

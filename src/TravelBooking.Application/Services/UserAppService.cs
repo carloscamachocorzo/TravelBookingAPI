@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Azure.Core;
 using MediatR;
+using System.Runtime.CompilerServices;
 using TravelBooking.Application.Common;
 using TravelBooking.Application.Dtos.Users;
 using TravelBooking.Application.Services.Interfaces;
@@ -33,6 +34,10 @@ namespace TravelBooking.Application.Services
                 if (!IsValidEmail(createUserDto.Email))
                 {
                     return RequestResult<UserDto>.CreateUnsuccessful(new[] { "The email provided is not valid." });
+                }
+                if (!IsPasswordSecure(createUserDto.Password, out string errorMessage))
+                {
+                    return RequestResult<UserDto>.CreateUnsuccessful(new[] { errorMessage });
                 }
                 var userEntity = _mapper.Map<Users>(createUserDto);
                 // Hash the password
@@ -100,6 +105,54 @@ namespace TravelBooking.Application.Services
                 return false;
             }
         }
+        private bool IsPasswordSecure(string password, out string errorMessage)
+        {
+            errorMessage = string.Empty;
+
+            // Criteria configuration
+            int minLength = 8; // Minimum length
+            string specialCharacters = @"!@#$%^&*()-_+=<>?"; // Allowed special characters
+
+            // Validations
+            if (string.IsNullOrWhiteSpace(password))
+            {
+                errorMessage = "The password cannot be empty.";
+                return false;
+            }
+
+            if (password.Length < minLength)
+            {
+                errorMessage = $"The password must be at least {minLength} characters long.";
+                return false;
+            }
+
+            if (!password.Any(char.IsUpper))
+            {
+                errorMessage = "The password must contain at least one uppercase letter.";
+                return false;
+            }
+
+            if (!password.Any(char.IsLower))
+            {
+                errorMessage = "The password must contain at least one lowercase letter.";
+                return false;
+            }
+
+            if (!password.Any(char.IsDigit))
+            {
+                errorMessage = "The password must contain at least one number.";
+                return false;
+            }
+
+            if (!password.Any(c => specialCharacters.Contains(c)))
+            {
+                errorMessage = "The password must contain at least one special character.";
+                return false;
+            }
+
+            return true; // The password meets all criteria
+        }
+
         #endregion
     }
 
