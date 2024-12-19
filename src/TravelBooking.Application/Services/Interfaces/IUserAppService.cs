@@ -16,7 +16,7 @@ namespace TravelBooking.Application.Services.Interfaces
         /// A <see cref="Task"/> representing the asynchronous operation, 
         /// with a result of <see cref="RequestResult{T}"/> containing the created user details.
         /// </returns>
-        Task<RequestResult<UserDto>> CreateUserAsync(CreateUserDto createUserDto);
+        Task<RequestResult<UserDto>> CreateUserAsync(CreateUserRequestsDto createUserDto);
 
         /// <summary>
         /// Updates an existing user.

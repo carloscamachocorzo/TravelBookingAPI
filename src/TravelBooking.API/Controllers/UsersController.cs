@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Filters;
+using TravelBooking.API.Examples;
 using TravelBooking.Application.Common;
 using TravelBooking.Application.Constants;
 using TravelBooking.Application.Dtos.Users;
@@ -45,7 +47,9 @@ namespace TravelBooking.API.Controllers
         [Authorize]
         [Permission("CreateUser")]
         [HttpPost]
-        public async Task<IActionResult> CreateUser([FromBody] CreateUserDto createUserDto)
+        [SwaggerRequestExample(typeof(CreateUserRequestsDto), typeof(CreateUserRequestDtoExample))]
+        [SwaggerResponseExample(200, typeof(CreateUserRequestDtoExample))]
+        public async Task<IActionResult> CreateUser([FromBody] CreateUserRequestsDto createUserDto)
         {
             if (!ModelState.IsValid)
             {

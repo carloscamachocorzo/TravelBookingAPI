@@ -59,7 +59,7 @@ namespace TravelBooking.Application.Automapper
                 // Mapping for HotelName
                 .ForMember(dest => dest.HotelName, opt => opt.MapFrom(src => src.Name));
 
-            CreateMap<CreateUserDto, Users>();
+            CreateMap<CreateUserRequestsDto, Users>();
             CreateMap<UpdateUserDto, Users>();
             CreateMap<Users, UserDto>();
         }

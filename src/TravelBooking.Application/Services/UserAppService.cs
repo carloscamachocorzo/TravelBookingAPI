@@ -22,7 +22,7 @@ namespace TravelBooking.Application.Services
             _jwtService = jwtService;
         }
 
-        public async Task<RequestResult<UserDto>> CreateUserAsync(CreateUserDto createUserDto)
+        public async Task<RequestResult<UserDto>> CreateUserAsync(CreateUserRequestsDto createUserDto)
         {
             try
             {

@@ -2,7 +2,7 @@
 
 namespace TravelBooking.Application.Dtos.Users
 {
-    public class CreateUserDto
+    public class CreateUserRequestsDto
     {
         [Required]
         [StringLength(50, ErrorMessage = "First Name cannot exceed 50 characters.")]

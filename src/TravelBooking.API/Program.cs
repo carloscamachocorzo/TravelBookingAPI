@@ -1,10 +1,12 @@
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NLog;
 using NLog.Web;
+using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
 using System.Text;
 using TravelBooking.Application.DependecyInyection;
@@ -82,6 +84,8 @@ namespace TravelBooking.API
                         new string[] {}
                     }
                 });
+                // Registrar el uso de Swashbuckle.AspNetCore.Filters
+                c.ExampleFilters();
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
@@ -101,6 +105,8 @@ namespace TravelBooking.API
                     };
                 });
             builder.Services.AddAuthorization();
+            // Register explamples
+            builder.Services.AddSwaggerExamplesFromAssemblyOf<Program>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
