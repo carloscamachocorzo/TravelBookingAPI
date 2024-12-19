@@ -5,11 +5,11 @@ namespace TravelBooking.Application.Dtos.Users
     public class CreateUserDto
     {
         [Required]
-        [StringLength(100, ErrorMessage = "First Name cannot exceed 100 characters.")]
+        [StringLength(50, ErrorMessage = "First Name cannot exceed 50 characters.")]
         public string FirstName { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "Last Name cannot exceed 100 characters.")]
+        [StringLength(50, ErrorMessage = "Last Name cannot exceed 50 characters.")]
         public string LastName { get; set; }
 
         [Required]
@@ -20,7 +20,7 @@ namespace TravelBooking.Application.Dtos.Users
         public string PhoneNumber { get; set; }
 
         [Required]
-        [RegularExpression("Admin|TravelAgent|Guest", ErrorMessage = "Invalid Role.")]
+        [RegularExpression("Admin|TravelAgent|Traveler", ErrorMessage = "Invalid Role.")]
         public string Role { get; set; }
         [Required]
         [StringLength(50, ErrorMessage = "Username cannot exceed 50 characters.")]
