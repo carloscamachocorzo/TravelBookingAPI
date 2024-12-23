@@ -17,6 +17,11 @@ namespace TravelBooking.Application.Automapper
             // Mapping between Hotels entity and UpdateHotelDto (bidirectional mapping)
             CreateMap<Hotels, UpdateHotelDto>().ReverseMap();
 
+            CreateMap<Guests, GuestsResponseDto>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => $"{src.FirstName ?? ""} {src.LastName ?? ""}".Trim()))
+                .ReverseMap();
+
+            CreateMap<EmergencyContacts, EmergencyContactsResponseDto>().ReverseMap();
             // Mapping from Reservations to ReservationDetailsDto
             CreateMap<Reservations, ReservationDetailsResponseDto>()
                 .ForMember(dest => dest.HotelName,
@@ -30,6 +35,8 @@ namespace TravelBooking.Application.Automapper
                 .ForMember(dest => dest.HotelName, opt => opt.MapFrom(src => src.Room.Hotel.Name))
                 .ForMember(dest => dest.RoomName, opt => opt.MapFrom(src => src.Room.Number))
                 .ForMember(dest => dest.NumberOfGuests, opt => opt.MapFrom(src => src.TotalGuests))
+                .ForMember(dest => dest.Guests, opt => opt.MapFrom(src => src.Guests))
+                .ForMember(dest => dest.EmergencyContacts, opt => opt.MapFrom(src => src.EmergencyContacts))
                 .ReverseMap(); // Enables bidirectional mapping
 
             // Mapping for Rooms to RoomResponseDto

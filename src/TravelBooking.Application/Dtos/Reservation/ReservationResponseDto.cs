@@ -45,10 +45,11 @@
         /// </summary>
         public decimal TotalCost { get; set; }
 
+        public ICollection<GuestsResponseDto> Guests { get; set; } = new List<GuestsResponseDto>();
         /// <summary>
         /// A collection of emergency contacts associated with the reservation.
         /// </summary>
-        public virtual ICollection<EmergencyContactsResponseDto> EmergencyContacts { get; set; } = new List<EmergencyContactsResponseDto>();
+        public ICollection<EmergencyContactsResponseDto> EmergencyContacts { get; set; } = new List<EmergencyContactsResponseDto>();
     }
 
 }

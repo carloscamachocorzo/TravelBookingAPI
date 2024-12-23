@@ -56,6 +56,12 @@ namespace TravelBooking.Application.Services
                     TotalGuests = r.TotalGuests,
                     TotalCost = r.TotalCost,
                     ReservationDate = r.ReservationDate,
+                    Guests = r.Guests.Select(g => new GuestsResponseDto
+                    {
+                        Email = g.Email,
+                        Name = g.FirstName,
+                        PhoneNumber = g.PhoneNumber
+                    }).ToList(),
                     EmergencyContacts = r.EmergencyContacts.Select(m => new EmergencyContactsResponseDto
                     {
                         EmergencyContactId = m.EmergencyContactId,
@@ -121,7 +127,7 @@ namespace TravelBooking.Application.Services
                 var totalDays = (createReservationDto.CheckOutDate.ToDateTime(TimeOnly.MinValue) - createReservationDto.CheckInDate.ToDateTime(TimeOnly.MinValue)).Days;
 
                 // Calculate the daily cost including tax
-                var dailyRateWithTax = room.baseRate + (room.baseRate * room.Tax); 
+                var dailyRateWithTax = room.baseRate + (room.baseRate * room.Tax);
 
                 // Calculate the total cost by multiplying by the days
                 var totalCost = dailyRateWithTax * totalDays;

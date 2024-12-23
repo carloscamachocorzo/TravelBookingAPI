@@ -87,7 +87,7 @@ namespace TravelBooking.API.Controllers
 
             if (result.IsSuccessful)
             {
-                return Ok(RequestResult<bool>.CreateSuccessful(result.Result, new List<string> { "Room status updated successfully." }));
+                return Ok(result);
             }
             else if (!result.IsError)
             {
@@ -116,7 +116,7 @@ namespace TravelBooking.API.Controllers
 
             if (result.IsSuccessful)
             {
-                return Ok(result.Result);
+                return Ok(result);
             }
             else if (!result.IsError)
             {

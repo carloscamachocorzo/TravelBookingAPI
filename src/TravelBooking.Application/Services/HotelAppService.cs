@@ -33,7 +33,7 @@ namespace TravelBooking.Application.Services
             _logger = logger;
         }
 
-        public async Task<RequestResult<CreateHotelResponseDto>> CreateHotel(CreateHotelDto request)
+        public async Task<RequestResult<CreateHotelResponseDto>> CreateHotel(CreateHotelRequestsDto request)
         {
             try
             {

@@ -45,7 +45,9 @@ namespace TravelBooking.API.Controllers
         [Authorize]
         [Permission("CreateHotel")]
         [HttpPost("create")]
-        public async Task<IActionResult> CreateHotel([FromBody] CreateHotelDto request)
+        [SwaggerRequestExample(typeof(CreateHotelRequestsDto), typeof(CreateHotelsRequestDtoExample))]
+        [SwaggerResponseExample(200, typeof(CreateHotelsRequestDtoExample))]
+        public async Task<IActionResult> CreateHotel([FromBody] CreateHotelRequestsDto request)
         {
              
 
@@ -120,7 +122,7 @@ namespace TravelBooking.API.Controllers
 
             if (result.IsSuccessful)
             {
-                return Ok(RequestResult<bool>.CreateSuccessful(result.Result));
+                return Ok(result);
             }
             else if (!result.IsError)
             {
@@ -153,7 +155,7 @@ namespace TravelBooking.API.Controllers
 
             if (result.IsSuccessful)
             {
-                return Ok(RequestResult<bool>.CreateSuccessful(result.Result));
+                return Ok(result);
             }
             else if (!result.IsError)
             {
@@ -179,7 +181,7 @@ namespace TravelBooking.API.Controllers
 
             if (result.IsSuccessful)
             {
-                return Ok(RequestResult<List<CreateHotelResponseDto>>.CreateSuccessful(result.Result));
+                return Ok(result);
             }
             else if (!result.IsError)
             {
@@ -212,7 +214,7 @@ namespace TravelBooking.API.Controllers
 
             if (result.IsSuccessful)
             {
-                return Ok(RequestResult<List<SearchHotelResponseDto>>.CreateSuccessful(result.Result));
+                return Ok(result);
             }
             else
             {

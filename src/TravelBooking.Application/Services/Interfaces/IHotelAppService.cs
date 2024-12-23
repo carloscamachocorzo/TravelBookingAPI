@@ -14,7 +14,7 @@ namespace TravelBooking.Application.Services.Interfaces
         /// </summary>
         /// <param name="request">The details of the hotel to be created.</param>
         /// <returns>The result containing the details of the created hotel.</returns>
-        Task<RequestResult<CreateHotelResponseDto>> CreateHotel(CreateHotelDto request);
+        Task<RequestResult<CreateHotelResponseDto>> CreateHotel(CreateHotelRequestsDto request);
 
         /// <summary>
         /// Assigns rooms to an existing hotel.

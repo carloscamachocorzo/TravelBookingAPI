@@ -5,7 +5,7 @@ namespace TravelBooking.Application.Dtos.Hotels
     /// <summary>
     /// Represents the data required to create a new hotel.
     /// </summary>
-    public class CreateHotelDto
+    public class CreateHotelRequestsDto
     {
         /// <summary>
         /// The name of the hotel.
